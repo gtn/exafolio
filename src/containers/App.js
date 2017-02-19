@@ -53,9 +53,9 @@ class App extends Component {
 	handleRefreshClick(e) {
 		e.preventDefault();
 
-		const {dispatch, selectedReddit} = this.props;
-		dispatch(invalidateReddit(selectedReddit));
-		dispatch(fetchPostsIfNeeded(selectedReddit));
+		// const {dispatch, selectedReddit} = this.props;
+		// dispatch(invalidateReddit(selectedReddit));
+		// dispatch(fetchPostsIfNeeded(selectedReddit));
 	}
 
 	render() {
