@@ -9,7 +9,8 @@ class Login extends Component {
 
 		// set the initial component state
 		this.state = {
-			loading: false
+			loading: false,
+			error: null
 		}
 	}
 
@@ -56,4 +57,7 @@ Login.propTypes = {
 	onSubmit: PropTypes.func.isRequired,
 }
 
-export default connect(state => Object.assign({}, state.pages.login, {dispatch: state.dispatch}))(Login);
+export default connect(state => Object.assign({}, {
+	page: state.pages.login,
+	dispatch: state.dispatch
+}))(Login);

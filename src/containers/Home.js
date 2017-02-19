@@ -5,7 +5,7 @@ import * as actions from '../actions';
 
 class Home extends Component {
 	componentDidMount() {
-		// this.props.dispatch(actions.loadCourses());
+		this.props.dispatch(actions.loadCourses());
 	}
 
 	render() {
@@ -27,7 +27,8 @@ class Home extends Component {
 	}
 }
 
-export default connect(state => Object.assign({}, state.pages.home, {
+export default connect(state => Object.assign({}, {
+	page: state.pages.home,
 	courses: state.user.courses,
 	dispatch: state.dispatch
 }))(Home);

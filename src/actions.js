@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import webservice from './webservice';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
@@ -89,17 +89,9 @@ function loadData(tokens) {
 
 export function login(data) {
 	return dispatch => {
-		var form = new FormData()
-		form.append('username', data.username);
-		form.append('password', data.password);
-
 		let loginData = data;
 
-		return fetch('http://localhost/moodle30/blocks/exacomp/token.php', {
-			method: 'POST',
-			body: form
-		})
-			.then(req => req.json())
+		return webservice.login(data)
 			.then(data => {
 				if (data.user && data.config) {
 					data.moodleconfig = data.config;
@@ -120,25 +112,12 @@ export function login(data) {
 }
 
 export function loadCourses() {
-	return (dispatch, getState) => {
-		const state = getState();
-		console.log(state, state.moodleconfig.tokens);
-
-		var form = new FormData()
-		form.append('moodlewsrestformat', 'json');
-		form.append('wstoken', state.moodleconfig.tokens.exacompservices);
-		form.append('wsfunction', 'dakora_get_courses');
-
-		return fetch('http://localhost/moodle30/webservice/rest/server.php', {
-			method: 'POST',
-			body: form
-		})
-			.then(req => req.json())
+	return dispatch =>
+		webservice.wsfunction('dakora_get_courses')
 			.then(courses => dispatch({
 				type: COURSES_LOADED,
 				courses
 			}));
-	};
 }
 
 export function loginError(error) {

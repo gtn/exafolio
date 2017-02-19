@@ -1,7 +1,7 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import * as reducers from './reducers';
+import rootReducer from './reducers';
 import * as storage from 'redux-storage'
 
 /* *
@@ -26,7 +26,7 @@ export default store;
 // Note: The reducer does nothing special! It just listens for the LOAD
 //       action and merge in the provided state :)
 // Note: A custom merger function can be passed as second argument
-const reducer = storage.reducer(combineReducers(reducers));
+const reducer = storage.reducer(rootReducer);
 
 // Now it's time to decide which storage engine should be used
 //
@@ -44,9 +44,9 @@ const middleware = storage.createMiddleware(engine);
 
 // As everything is prepared, we can go ahead and combine all parts as usual
 const createStoreWithMiddleware = applyMiddleware(
-	middleware,
 	thunkMiddleware,
-	createLogger()
+	createLogger(),
+	middleware,
 )(createStore);
 const store = createStoreWithMiddleware(reducer);
 

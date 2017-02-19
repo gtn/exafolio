@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import store from '../configureStore';
+import store from '../store';
 import App from './App';
 
 export default class Root extends Component {
