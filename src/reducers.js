@@ -6,7 +6,7 @@ import {
 
 import * as actions from './actions';
 
-function selectedReddit(state = 'reactjs', action) {
+export function selectedReddit(state = 'reactjs', action) {
 	switch (action.type) {
 		case SELECT_REDDIT:
 			return action.reddit;
@@ -15,7 +15,7 @@ function selectedReddit(state = 'reactjs', action) {
 	}
 }
 
-function isLoggedin(state = false, action) {
+export function isLoggedin(state = false, action) {
 	switch (action.type) {
 		case actions.LOGGEDIN:
 			return true;
@@ -37,7 +37,7 @@ function loginstate(state = {}, action) {
   }
 }
 */
-function posts(state = {
+export function posts(state = {
 	isFetching: false,
 	didInvalidate: false,
 	items: []
@@ -64,7 +64,7 @@ function posts(state = {
 	}
 }
 
-function postsByReddit(state = {}, action) {
+export function postsByReddit(state = {}, action) {
 	switch (action.type) {
 		case INVALIDATE_REDDIT:
 		case RECEIVE_POSTS:
@@ -77,18 +77,22 @@ function postsByReddit(state = {}, action) {
 	}
 }
 
-function loginPage(state = {}, action) {
+export function loginPage(state = {}, action) {
 	switch (action.type) {
 		case actions.LOGIN_ERROR:
 			return Object.assign({}, state, {
 				error: action.error
+			});
+		case actions.LOGGEDIN:
+			return Object.assign({}, state, {
+				error: null
 			});
 		default:
 			return state;
 	}
 }
 
-function currentPage(state = '', action) {
+export function currentPage(state = '', action) {
 	switch (action.type) {
 		case actions.SWITCH_PAGE:
 			return action.page;
@@ -97,7 +101,7 @@ function currentPage(state = '', action) {
 	}
 }
 
-function coursedetail(state = {}, action) {
+export function courseDetailPage(state = {}, action) {
 	switch (action.type) {
 		case actions.SWITCH_PAGE:
 			return Object.assign({}, action.data);
@@ -107,7 +111,7 @@ function coursedetail(state = {}, action) {
 }
 
 
-function user(state = {}, action) {
+export function user(state = {}, action) {
 	switch (action.type) {
 		case actions.LOGGEDIN:
 			return Object.assign({}, action.user);
@@ -118,7 +122,7 @@ function user(state = {}, action) {
 	}
 }
 
-function moodleconfig(state = {}, action) {
+export function moodleconfig(state = {}, action) {
 	switch (action.type) {
 		case actions.LOGGEDIN:
 			return Object.assign({}, action.moodleconfig);
@@ -129,6 +133,12 @@ function moodleconfig(state = {}, action) {
 	}
 }
 
+export const pages = combineReducers({
+	login: loginPage,
+	coursedetail: courseDetailPage
+});
+
+/*
 const rootReducer = combineReducers({
 	isLoggedin,
 	user,
@@ -136,10 +146,10 @@ const rootReducer = combineReducers({
 	currentPage,
 	pages: combineReducers({
 		login: loginPage,
-		coursedetail
+		coursedetail: courseDetailPage
 	}),
 	postsByReddit,
 	selectedReddit
 });
-
 export default rootReducer;
+*/

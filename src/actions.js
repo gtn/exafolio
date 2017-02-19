@@ -93,24 +93,29 @@ export function login(data) {
 		form.append('username', data.username);
 		form.append('password', data.password);
 
+		let loginData = data;
+
 		return fetch('http://localhost/moodle30/blocks/exacomp/token.php', {
 			method: 'POST',
 			body: form
 		})
 			.then(req => req.json())
-			.then((data) => {
-					if (data.user && data.config) {
-						data.moodleconfig = data.config;
-						delete data.config;
+			.then(data => {
+				if (data.user && data.config) {
+					data.moodleconfig = data.config;
+					delete data.config;
 
-						dispatch(loginSuccess(data));
-					} else {
-						dispatch(loginError('wrong user/password'));
-					}
-				},
-				(error) => {
-					dispatch(loginError('could not connect'));
-				});
+					loginData.form.setState({loading: false, error: 'success'});
+					dispatch(loginSuccess(data));
+				} else {
+					loginData.form.setState({loading: false, error: 'wrong user/password'});
+					dispatch(loginError('wrong user/password'));
+				}
+			})
+			.catch(() => {
+				loginData.form.setState({loading: false, error: 'could not connect'});
+				dispatch(loginError('could not connect'));
+			});
 	}
 }
 
@@ -129,14 +134,10 @@ export function loadCourses() {
 			body: form
 		})
 			.then(req => req.json())
-			.then(
-				(courses) => {
-					dispatch({
-						type: COURSES_LOADED,
-						courses
-					});
-				}
-			);
+			.then(courses => dispatch({
+				type: COURSES_LOADED,
+				courses
+			}));
 	};
 }
 

@@ -19,7 +19,6 @@ class App extends Component {
 		// this.state = {};
 	}
 
-
 	/*
 	componentDidMount() {
 		console.log(this.props);
@@ -42,7 +41,9 @@ class App extends Component {
 
 	@autobind
 	handleLogin(data) {
+
 		if (!data.username) {
+			data.form.setState({loading: false, error: 'No username 2'});
 			this.props.dispatch(actions.loginError('No username'));
 		} else {
 			this.props.dispatch(actions.login(data));
@@ -89,7 +90,7 @@ class App extends Component {
 
 		return !this.props.loggedin ?
 			( <div>
-				<Login onLogin={this.handleLogin} loginError={this.state.loginError}/>
+				<Login onSubmit={this.handleLogin} loginError={this.state.loginError}/>
 			</div>) :
 			( <div>
 					<Picker value={selectedReddit}
