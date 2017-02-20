@@ -11,6 +11,7 @@ export const
 	LOGIN_ERROR = 'LOGIN_ERROR',
 	SWITCH_PAGE = 'SWITCH_PAGE',
 	COURSES_LOADED = 'COURSES_LOADED',
+	SET_CONFIG = 'SET_CONFIG',
 	DUMMY = 'DUMMY';
 
 /*
@@ -106,7 +107,7 @@ export function login(data) {
 			})
 			.catch(() => {
 				loginData.form.setState({loading: false, error: 'could not connect'});
-				dispatch(loginError('could not connect'));
+				dispatch(loginError('could not connect dispatch'));
 			});
 	}
 }
@@ -136,6 +137,13 @@ export function loginSuccess(data) {
 export function logout() {
 	return {
 		type: LOGGEDOUT,
+	};
+};
+
+export function setConfig(data) {
+	return {
+		type: SET_CONFIG,
+		data
 	};
 };
 

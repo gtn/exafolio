@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import {connect} from 'react-redux';
 import * as actions from '../actions';
 import webservice from '../webservice';
+import {List, ListItem} from 'material-ui/List';
 
 class CourseDetail extends Component {
 	constructor(props) {
@@ -24,19 +25,28 @@ class CourseDetail extends Component {
 				<h1>Course {this.props.page.course.fullname}</h1>
 				{!this.state.students
 					? 'lade studenten liste'
-					: this.state.students.map((student, i) =>
-					<li key={i}
-					    onClick={() => this.props.dispatch(actions.switchPage('studentdetail', {student}))}
-					    style={{cursor: 'pointer'}}
-					>{student.firstname} {student.lastname}</li>
-				)}
+					: (
+					<List>
+						{this.state.students.map((student, i) =>
+							<ListItem
+								key={i}
+								style={{cursor: 'pointer'}}
+								onClick={() => alert(`sudent click ${student.firstname} ${student.lastname}`)}
+								primaryText={student.firstname + ' ' + student.lastname}/>
+						)
+						}
+					</List>
+				)
+					//onClick={() => this.props.dispatch(actions.switchPage('studentdetail', {student}))}
+				}
+
 				<button onClick={() => this.props.dispatch(actions.switchPage('home'))}>back</button>
 			</div>
 		);
 	}
 }
 
-export default connect(state => Object.assign({}, {
+export default connect(state => ({
 	page: state.pages.coursedetail,
 	course: state.pages.coursedetail.course,
 	dispatch: state.dispatch,

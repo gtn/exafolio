@@ -102,11 +102,10 @@ function currentPage(state = '', action) {
 }
 
 function courseDetailPage(state = {}, action) {
-	switch (action.type) {
-		case actions.SWITCH_PAGE:
-			return Object.assign({}, action.data);
-		default:
-			return state;
+	if (action.type == actions.SWITCH_PAGE && action.page == 'coursedetail') {
+		return Object.assign({}, state, action.data);
+	} else {
+		return state;
 	}
 }
 
@@ -114,7 +113,7 @@ function courseDetailPage(state = {}, action) {
 function user(state = {}, action) {
 	switch (action.type) {
 		case actions.LOGGEDIN:
-			return Object.assign({}, action.user);
+			return action.user;
 		case actions.LOGGEDOUT:
 			return {};
 		default:
@@ -125,9 +124,22 @@ function user(state = {}, action) {
 function moodleconfig(state = {}, action) {
 	switch (action.type) {
 		case actions.LOGGEDIN:
-			return Object.assign({}, action.moodleconfig);
+			return action.moodleconfig;
 		case actions.LOGGEDOUT:
 			return {};
+		default:
+			return state;
+	}
+}
+
+function config(state = {}, action) {
+	if (!state.moodleUrl) {
+		state.moodleUrl = document.location.href.replace(/\?.*/, '').replace(/\/exafolio\/*$/, '');
+	}
+
+	switch (action.type) {
+		case actions.SET_CONFIG:
+			return Object.assign({}, state, action.data);
 		default:
 			return state;
 	}
@@ -141,6 +153,7 @@ const pages = combineReducers({
 const reducers = combineReducers({
 	isLoggedin,
 	user,
+	config,
 	moodleconfig,
 	currentPage,
 	pages

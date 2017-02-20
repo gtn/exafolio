@@ -9,6 +9,9 @@ import Home from './Home';
 import CourseDetail from './CourseDetail';
 import autobind from 'autobind-decorator'
 import * as actions from '../actions';
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import '../css/styles.css';
 
 class App extends Component {
 	constructor(props) {
@@ -74,21 +77,28 @@ class App extends Component {
 			}
 
 			return <div>
-				<div>Top:
-					<button type="button" onClick={() => {
-						this.props.dispatch(actions.logout());
-					}}>Logout
-					</button>
-
-					Name: {this.props.user.fullname}
-				</div>
+				<AppBar
+					title={`Exafolio (${this.props.user.fullname})`}
+					showMenuIconButton={false}
+					iconElementRight={
+						<div>
+							<RaisedButton
+								label="Logout"
+								style={{margin: '5px 0 0 0'}}
+								onClick={() => {
+									this.props.dispatch(actions.logout());
+								}}
+							/>
+						</div>
+					}
+				/>
 				{page}
 			</div>
 		}
 
 		const {selectedReddit, posts, isFetching, lastUpdated} = this.props;
 
-		return !this.props.loggedin ?
+		let content = !this.props.loggedin ?
 			( <div>
 				<Login onSubmit={this.handleLogin} loginError={this.state.loginError}/>
 			</div>) :
@@ -123,6 +133,9 @@ class App extends Component {
 					}
 				</div>
 			);
+		return (
+		{content}
+		);
 	}
 }
 

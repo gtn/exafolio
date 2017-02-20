@@ -20,8 +20,11 @@ module.exports = {
 	module: {
 		rules: [{
 			test: /\.jsx?$/,
-			loader: 'babel-loader?cacheDirectory=true',
+			loaders: ['babel-loader?cacheDirectory=true'],
 			include: path.join(__dirname, 'src')
+		}, {
+			test: /\.css$/,
+			loaders: ['style-loader', 'css-loader']
 		}]
 	}
 };
