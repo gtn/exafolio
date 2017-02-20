@@ -48,5 +48,8 @@ module.exports = {
 			loaders: ['style-loader', 'css-loader']
 			*/
 		}]
+	},
+	resolve: {
+		extensions: ['.js', '.jsx']
 	}
 };
