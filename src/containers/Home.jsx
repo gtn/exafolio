@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import {connect} from 'react-redux';
 import * as actions from '../actions';
 import {List, ListItem} from 'material-ui/List';
+import Translate from '../components/Translate';
 
 class Home extends Component {
 	componentDidMount() {

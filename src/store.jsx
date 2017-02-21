@@ -1,6 +1,5 @@
 import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
 import rootReducer from './reducers';
 import * as storage from 'redux-storage'
 
@@ -42,12 +41,18 @@ const engine = createEngine('my-save-key');
 //       actions will be filtered and WON'T trigger calls to `engine.save`!
 const middleware = storage.createMiddleware(engine);
 
-// As everything is prepared, we can go ahead and combine all parts as usual
-const createStoreWithMiddleware = applyMiddleware(
+let middlewares = [
 	thunkMiddleware,
-	createLogger(),
 	middleware,
-)(createStore);
+];
+
+if (process.env.NODE_ENV !== 'production') {
+  let createLogger = require('redux-logger');
+  middlewares.push(createLogger());
+}
+
+// As everything is prepared, we can go ahead and combine all parts as usual
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 const store = createStoreWithMiddleware(reducer);
 
 // At this stage the whole system is in place and every action will trigger
@@ -66,7 +71,8 @@ load(store);
 // Notice that our load function will return a promise that can also be used
 // to respond to the restore event.
 load(store)
-	.then((newState) => console.log('Loaded state:', newState))
+	// .then((newState) => console.log('Loaded state:', newState))
+	.then(() => console.log('Loaded last app state'))
 	.catch(() => console.log('Failed to load previous state'));
 
 export default store;
