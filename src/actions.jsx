@@ -1,18 +1,138 @@
-import webservice from './webservice';
+import webservice from '/webservice';
+import * as consts from '/consts';
 
+export function login(form, data) {
+	return dispatch => {
+		return webservice.login(data)
+			.then(data => {
+				if (data.user && data.config) {
+					data.moodleconfig = data.config;
+					delete data.config;
+
+					form.setState({loading: false, error: null});
+					dispatch(loginSuccess(data));
+				} else {
+					let error = data.error || 'wrong user/password';
+					form.setState({loading: false, error});
+					dispatch(loginError(error));
+				}
+			})
+			.catch(() => {
+				form.setState({loading: false, error: 'could not connect'});
+				dispatch(loginError('could not connect dispatch'));
+			});
+	}
+}
+
+export function loadCourses() {
+	return dispatch =>
+		webservice.wsfunction('dakora_get_courses')
+			.then(courses => dispatch({
+				type: consts.COURSES_LOADED,
+				courses
+			}));
+}
+
+export function loginError(error) {
+	return {
+		type: consts.LOGIN_ERROR,
+		error: error
+	};
+};
+
+export function loginSuccess(data) {
+	return Object.assign({
+		type: consts.LOGGEDIN,
+	}, data);
+};
+
+export function logout() {
+	return {
+		type: consts.LOGGEDOUT,
+	};
+};
+
+export function setConfig(data) {
+	return {
+		type: consts.SET_CONFIG,
+		data
+	};
+};
+
+export function switchPage(page, data = {}) {
+	return {
+		type: consts.SWITCH_PAGE,
+		page,
+		data
+	};
+}
+
+/*
+export function selectReddit(reddit) {
+	return {
+		type: SELECT_REDDIT,
+		reddit
+	};
+}
+
+export function invalidateReddit(reddit) {
+	return {
+		type: INVALIDATE_REDDIT,
+		reddit
+	};
+}
+
+function requestPosts(reddit) {
+	return {
+		type: REQUEST_POSTS,
+		reddit
+	};
+}
+
+function receivePosts(reddit, json) {
+	return {
+		type: RECEIVE_POSTS,
+		reddit,
+		posts: json.data.children.map(child => child.data),
+		receivedAt: Date.now()
+	};
+}
+
+function fetchPosts(reddit) {
+	return dispatch => {
+		dispatch(requestPosts(reddit));
+		return fetch(`http://www.reddit.com/r/${reddit}.json`)
+			.then(req => req.json())
+			.then(json => dispatch(receivePosts(reddit, json)));
+	}
+}
+
+function shouldFetchPosts(state, reddit) {
+	const posts = state.postsByReddit[reddit];
+	if (!posts) {
+		return true;
+	} else if (posts.isFetching) {
+		return false;
+	} else {
+		return posts.didInvalidate;
+	}
+}
+
+export function fetchPostsIfNeeded(reddit) {
+	return (dispatch, getState) => {
+		if (shouldFetchPosts(getState(), reddit)) {
+			return dispatch(fetchPosts(reddit));
+		}
+	};
+}
+*/
+
+/*
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const SELECT_REDDIT = 'SELECT_REDDIT';
 export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT';
-
-export const
-	LOGGEDIN = 'LOGGEDIN',
-	LOGGEDOUT = 'LOGGEDOUT',
-	LOGIN_ERROR = 'LOGIN_ERROR',
-	SWITCH_PAGE = 'SWITCH_PAGE',
-	COURSES_LOADED = 'COURSES_LOADED',
-	SET_CONFIG = 'SET_CONFIG',
-	DUMMY = 'DUMMY';
+*/
 
 /*
 export function login(data) {
@@ -88,127 +208,3 @@ function loadData(tokens) {
 
 */
 
-export function login(data) {
-	return dispatch => {
-		let loginData = data;
-
-		return webservice.login(data)
-			.then(data => {
-				if (data.user && data.config) {
-					data.moodleconfig = data.config;
-					delete data.config;
-
-					loginData.form.setState({loading: false, error: 'success'});
-					dispatch(loginSuccess(data));
-				} else {
-					loginData.form.setState({loading: false, error: 'wrong user/password'});
-					dispatch(loginError('wrong user/password'));
-				}
-			})
-			.catch(() => {
-				loginData.form.setState({loading: false, error: 'could not connect'});
-				dispatch(loginError('could not connect dispatch'));
-			});
-	}
-}
-
-export function loadCourses() {
-	return dispatch =>
-		webservice.wsfunction('dakora_get_courses')
-			.then(courses => dispatch({
-				type: COURSES_LOADED,
-				courses
-			}));
-}
-
-export function loginError(error) {
-	return {
-		type: LOGIN_ERROR,
-		error: error
-	};
-};
-
-export function loginSuccess(data) {
-	return Object.assign({
-		type: LOGGEDIN,
-	}, data);
-};
-
-export function logout() {
-	return {
-		type: LOGGEDOUT,
-	};
-};
-
-export function setConfig(data) {
-	return {
-		type: SET_CONFIG,
-		data
-	};
-};
-
-export function switchPage(page, data = {}) {
-	return {
-		type: SWITCH_PAGE,
-		page,
-		data
-	};
-}
-
-export function selectReddit(reddit) {
-	return {
-		type: SELECT_REDDIT,
-		reddit
-	};
-}
-
-export function invalidateReddit(reddit) {
-	return {
-		type: INVALIDATE_REDDIT,
-		reddit
-	};
-}
-
-function requestPosts(reddit) {
-	return {
-		type: REQUEST_POSTS,
-		reddit
-	};
-}
-
-function receivePosts(reddit, json) {
-	return {
-		type: RECEIVE_POSTS,
-		reddit,
-		posts: json.data.children.map(child => child.data),
-		receivedAt: Date.now()
-	};
-}
-
-function fetchPosts(reddit) {
-	return dispatch => {
-		dispatch(requestPosts(reddit));
-		return fetch(`http://www.reddit.com/r/${reddit}.json`)
-			.then(req => req.json())
-			.then(json => dispatch(receivePosts(reddit, json)));
-	}
-}
-
-function shouldFetchPosts(state, reddit) {
-	const posts = state.postsByReddit[reddit];
-	if (!posts) {
-		return true;
-	} else if (posts.isFetching) {
-		return false;
-	} else {
-		return posts.didInvalidate;
-	}
-}
-
-export function fetchPostsIfNeeded(reddit) {
-	return (dispatch, getState) => {
-		if (shouldFetchPosts(getState(), reddit)) {
-			return dispatch(fetchPosts(reddit));
-		}
-	};
-}

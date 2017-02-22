@@ -1,26 +1,12 @@
 import {combineReducers} from 'redux';
-import {
-	SELECT_REDDIT, INVALIDATE_REDDIT,
-	REQUEST_POSTS, RECEIVE_POSTS
-} from './actions';
-
-import * as actions from './actions';
-
-function selectedReddit(state = 'reactjs', action) {
-	switch (action.type) {
-		case SELECT_REDDIT:
-			return action.reddit;
-		default:
-			return state;
-	}
-}
+import * as consts from '/consts';
 
 function isLoggedin(state = false, action) {
 	switch (action.type) {
-		case actions.LOGGEDIN:
+		case consts.LOGGEDIN:
 			return true;
-		case actions.LOGGEDOUT:
-		case actions.LOGIN_ERROR:
+		case consts.LOGGEDOUT:
+		case consts.LOGIN_ERROR:
 			return false;
 		default:
 			return state;
@@ -37,6 +23,125 @@ function loginstate(state = {}, action) {
   }
 }
 */
+
+function loginPage(state = {}, action) {
+	return state;
+}
+
+function currentPage(state = '', action) {
+	switch (action.type) {
+		case consts.SWITCH_PAGE:
+			return action.page;
+		default:
+			return state;
+	}
+}
+
+function courseDetailPage(state = {}, action) {
+	if (action.type == consts.SWITCH_PAGE && action.page == 'coursedetail') {
+		return Object.assign({}, state, action.data);
+	} else {
+		return state;
+	}
+}
+
+
+function user(state = {}, action) {
+	switch (action.type) {
+		case consts.LOGGEDIN:
+			return action.user;
+		case consts.LOGGEDOUT:
+			return {};
+		default:
+			return state;
+	}
+}
+
+function moodleconfig(state = {}, action) {
+	switch (action.type) {
+		case consts.LOGGEDIN:
+			return action.moodleconfig;
+		case consts.LOGGEDOUT:
+			return {};
+		default:
+			return state;
+	}
+}
+
+function tokens(state = {}, action) {
+	switch (action.type) {
+		case consts.LOGGEDIN:
+			return action.tokens;
+		case consts.LOGGEDOUT:
+			return {};
+		default:
+			return state;
+	}
+}
+
+function config(state = {}, action) {
+	if (!state.moodleUrl) {
+		state.moodleUrl = document.location.href.replace(/\?.*/, '').replace(/\/exafolio\/*$/, '');
+	}
+
+	switch (action.type) {
+		case consts.SET_CONFIG:
+			return Object.assign({}, state, action.data);
+		default:
+			return state;
+	}
+}
+
+const pages = combineReducers({
+	login: loginPage,
+	coursedetail: courseDetailPage
+});
+
+const reducers = combineReducers({
+	isLoggedin,
+	user,
+	config,
+	moodleconfig,
+	tokens,
+	currentPage,
+	pages
+});
+
+export default function rootReducer(oldState = {}, action) {
+	let state = reducers(oldState, action);
+
+	if (!state.isLoggedin) {
+		// delete old data on logout
+		state.user = {};
+		state.moodleconfig = {};
+		state.pages = {
+			login: state.pages.login
+		};
+
+		if (state.currentPage != 'login' && state.currentPage != 'settings') {
+			state.currentPage = 'home';
+		}
+	}
+
+	return state;
+}
+
+/*
+import {
+	SELECT_REDDIT, INVALIDATE_REDDIT,
+	REQUEST_POSTS, RECEIVE_POSTS
+} from './actions';
+
+
+function selectedReddit(state = 'reactjs', action) {
+	switch (action.type) {
+		case SELECT_REDDIT:
+			return action.reddit;
+		default:
+			return state;
+	}
+}
+
 function posts(state = {
 	isFetching: false,
 	didInvalidate: false,
@@ -77,103 +182,4 @@ function postsByReddit(state = {}, action) {
 	}
 }
 
-function loginPage(state = {}, action) {
-	switch (action.type) {
-		case actions.LOGIN_ERROR:
-			return Object.assign({}, state, {
-				error: action.error
-			});
-		case actions.LOGGEDIN:
-			return Object.assign({}, state, {
-				error: null
-			});
-		default:
-			return state;
-	}
-}
-
-function currentPage(state = '', action) {
-	switch (action.type) {
-		case actions.SWITCH_PAGE:
-			return action.page;
-		default:
-			return state;
-	}
-}
-
-function courseDetailPage(state = {}, action) {
-	if (action.type == actions.SWITCH_PAGE && action.page == 'coursedetail') {
-		return Object.assign({}, state, action.data);
-	} else {
-		return state;
-	}
-}
-
-
-function user(state = {}, action) {
-	switch (action.type) {
-		case actions.LOGGEDIN:
-			return action.user;
-		case actions.LOGGEDOUT:
-			return {};
-		default:
-			return state;
-	}
-}
-
-function moodleconfig(state = {}, action) {
-	switch (action.type) {
-		case actions.LOGGEDIN:
-			return action.moodleconfig;
-		case actions.LOGGEDOUT:
-			return {};
-		default:
-			return state;
-	}
-}
-
-function config(state = {}, action) {
-	if (!state.moodleUrl) {
-		state.moodleUrl = document.location.href.replace(/\?.*/, '').replace(/\/exafolio\/*$/, '');
-	}
-
-	switch (action.type) {
-		case actions.SET_CONFIG:
-			return Object.assign({}, state, action.data);
-		default:
-			return state;
-	}
-}
-
-const pages = combineReducers({
-	login: loginPage,
-	coursedetail: courseDetailPage
-});
-
-const reducers = combineReducers({
-	isLoggedin,
-	user,
-	config,
-	moodleconfig,
-	currentPage,
-	pages
-});
-
-export default function rootReducer(oldState = {}, action) {
-	let state = reducers(oldState, action);
-
-	if (!state.isLoggedin) {
-		// delete old data on logout
-		state.user = {};
-		state.moodleconfig = {};
-		state.pages = {
-			login: state.pages.login
-		};
-
-		if (state.currentPage != 'login' && state.currentPage != 'settings') {
-			state.currentPage = 'home';
-		}
-	}
-
-	return state;
-}
+*/

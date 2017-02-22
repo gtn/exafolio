@@ -1,37 +1,62 @@
 import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
 import autobind from 'autobind-decorator'
-import * as actions from '../actions';
+import * as actions from '/actions';
 import TextField from 'material-ui/TextField';
 import ActionAndroid from 'material-ui/svg-icons/action/android';
 import RaisedButton from 'material-ui/RaisedButton';
-import Modal from '../components/Modal';
+import Modal from '/components/Modal';
+import {connect} from 'react-redux';
+import {pageSelector} from '/selectors';
+
+// remember the state
+let state = {
+	fieldValues: {
+		username: 'teacher',
+		password: 'teacher',
+	},
+	loading: false,
+	error: null
+};
 
 class Login extends Component {
 	constructor(props) {
 		super(props);
 
 		// set the initial component state
-		this.state = {
-			loading: false,
-			error: null
-		}
+		this.state = state;
 	}
 
 	@autobind
 	submit(e) {
 		e.preventDefault();
 
-		this.setState({loading: true, error: ''});
+		const {fieldValues} = this.state;
 
-		this.props.onSubmit({
-			username: this.usernameInput.getValue(),
-			password: this.passwordInput.getValue(),
-			form: this
-		});
+		if (!fieldValues.username) {
+			this.setState({loading: false, error: 'No username'});
+			this.props.dispatch(actions.loginError('No username'));
+		} else {
+			this.setState({loading: true, error: ''});
+			this.props.dispatch(actions.login(this, fieldValues));
+		}
+	}
+
+	@autobind
+	handleChange(event) {
+		const {fieldValues} = this.state;
+
+		fieldValues[event.target.name] = event.target.value;
+		this.setState({fieldValues});
+	}
+
+	componentWillUnmount() {
+		// Remember state for the next mount
+		state = this.state;
 	}
 
 	render() {
+		const {fieldValues} = this.state;
+
 		return (
 			<form onSubmit={this.submit}>
 				<Modal header="Login">
@@ -40,19 +65,23 @@ class Login extends Component {
 					}
 
 					<TextField
-						defaultValue="teacher"
 						floatingLabelText="Username"
 						ref={input => this.usernameInput = input}
 						errorText={this.state.error}
 						fullWidth={true}
+						name="username"
+						defaultValue={fieldValues.username}
+						onChange={this.handleChange}
 					/>
 
 					<TextField
-						defaultValue="teacher"
 						floatingLabelText="Password"
 						ref={input => this.passwordInput = input}
 						type="password"
 						fullWidth={true}
+						name="password"
+						defaultValue={fieldValues.password}
+						onChange={this.handleChange}
 					/>
 
 					<RaisedButton
@@ -78,11 +107,12 @@ class Login extends Component {
 	}
 }
 
+/*
 Login.propTypes = {
 	onSubmit: PropTypes.func.isRequired,
 }
+*/
 
 export default connect(state => ({
-	page: state.pages.login,
-	dispatch: state.dispatch
+	page: pageSelector(state, 'login')
 }))(Login);

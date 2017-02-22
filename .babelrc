@@ -2,7 +2,12 @@
   "presets": ["es2015", "react", "stage-0"],
   "env": {
     "development": {
-      "plugins": ["transform-decorators-legacy", ["react-transform", {
+      "plugins": [
+        ["babel-root-slash-import", {
+          "rootPathSuffix": "src"
+        }],
+        "transform-decorators-legacy",
+        ["react-transform", {
         // must be an array of objects
         "transforms": [{
           // can be an NPM module name or a local path

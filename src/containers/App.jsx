@@ -1,17 +1,20 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {selectReddit, fetchPostsIfNeeded, invalidateReddit} from '../actions';
-import Picker from '../components/Picker';
-import Posts from '../components/Posts';
+import {selectReddit, fetchPostsIfNeeded, invalidateReddit} from '/actions';
+import Picker from '/components/Picker';
+import Posts from '/components/Posts';
 import Login from './Login';
 import Settings from './Settings';
 import Home from './Home';
 import CourseDetail from './CourseDetail';
 import autobind from 'autobind-decorator'
-import * as actions from '../actions';
+import * as actions from '/actions';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
-import '../css/styles.css';
+import '/css/styles.css';
+// Needed for onTouchTap
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 class App extends Component {
 	constructor(props) {
@@ -42,17 +45,6 @@ class App extends Component {
 		this.props.dispatch(selectReddit(nextReddit));
 	}
 
-	@autobind
-	handleLogin(data) {
-
-		if (!data.username) {
-			data.form.setState({loading: false, error: 'No username 2'});
-			this.props.dispatch(actions.loginError('No username'));
-		} else {
-			this.props.dispatch(actions.login(data));
-		}
-	}
-
 	handleRefreshClick(e) {
 		e.preventDefault();
 
@@ -64,7 +56,7 @@ class App extends Component {
 	render() {
 		if (!this.props.isLoggedin) {
 			if (this.props.currentPage == 'settings') {
-				return <Settings dispatch={this.props.dispatch} {...this.props.pages.settings}/>;
+				return <Settings/>;
 			} else {
 				return <Login onSubmit={this.handleLogin}/>;
 			}

@@ -22,7 +22,8 @@ class webservice {
 	login(data) {
 		return this.post(this.moodleurl('/blocks/exacomp/token.php'), {
 			username: data.username,
-			password: data.password
+			password: data.password,
+			services: 'moodle_mobile_app,exacompservices,exaportservices'
 		})
 			.then(req => req.json());
 	}
@@ -30,13 +31,21 @@ class webservice {
 	wsfunction(wsfunction, data = {}) {
 		const state = store.getState();
 
+		console.log(state.tokens);
+
 		return this.post(this.moodleurl('/webservice/rest/server.php'), {
 			...data,
 			moodlewsrestformat: 'json',
-			wstoken: state.moodleconfig.tokens.exacompservices,
+			wstoken: state.tokens.exacompservices,
 			wsfunction
 		})
 			.then(req => req.json())
+			.then((response) => {
+				if (response.exception) {
+					throw new Error(JSON.stringify(response));
+				}
+				return response;
+			});
 	}
 }
 

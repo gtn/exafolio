@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {get_string} from '../translate';
+import {get_string} from '/translate';
 
 export default class Translate extends Component {
 	render() {

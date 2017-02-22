@@ -1,8 +1,8 @@
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator'
 import {connect} from 'react-redux';
-import * as actions from '../actions';
-import webservice from '../webservice';
+import {pageSelector} from '/selectors';
+import * as actions from '/actions';
+import webservice from '/webservice';
 import {List, ListItem} from 'material-ui/List';
 
 class CourseDetail extends Component {
@@ -14,7 +14,7 @@ class CourseDetail extends Component {
 
 	componentDidMount() {
 		this.props.dispatch(() => webservice.wsfunction('dakora_get_students_for_course', {
-			courseid: this.props.course.courseid
+			courseid: this.props.page.course.courseid
 		})
 			.then((students) => this.setState({students})));
 	}
@@ -47,7 +47,5 @@ class CourseDetail extends Component {
 }
 
 export default connect(state => ({
-	page: state.pages.coursedetail,
-	course: state.pages.coursedetail.course,
-	dispatch: state.dispatch,
+	page: pageSelector(state, 'coursedetail')
 }))(CourseDetail);

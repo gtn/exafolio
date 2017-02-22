@@ -1,9 +1,8 @@
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator'
 import {connect} from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '/actions';
 import {List, ListItem} from 'material-ui/List';
-import Translate from '../components/Translate';
+import {pageSelector} from '/selectors';
 
 class Home extends Component {
 	componentDidMount() {
@@ -44,7 +43,6 @@ class Home extends Component {
 }
 
 export default connect(state => ({
-	page: state.pages.home,
-	courses: state.user.courses,
-	dispatch: state.dispatch
+	page: pageSelector(state, 'home'),
+	courses: state.user.dakoracourses,
 }))(Home);
