@@ -10,11 +10,17 @@ import CourseDetail from './CourseDetail';
 import autobind from 'autobind-decorator'
 import * as actions from '/actions';
 import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import '/css/styles.css';
+import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
+
+
 // Needed for onTouchTap
 import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+if (!window.TapEventInjected) {
+	injectTapEventPlugin();
+	window.TapEventInjected = true;
+}
 
 class App extends Component {
 	constructor(props) {
@@ -68,24 +74,27 @@ class App extends Component {
 				page = <Home/>;
 			}
 
-			return <div>
-				<AppBar
-					title={`Exafolio (${this.props.user.fullname})`}
-					showMenuIconButton={false}
-					iconElementRight={
-						<div>
-							<RaisedButton
-								label="Logout"
-								style={{margin: '5px 0 0 0'}}
-								onClick={() => {
-									this.props.dispatch(actions.logout());
-								}}
-							/>
-						</div>
-					}
-				/>
-				{page}
-			</div>
+			return (
+				<div>
+					<AppBar
+						title={`Exafolio (${this.props.user.fullname})`}
+						showMenuIconButton={false}
+						style={{position: 'fixed', left: 0, top: 0}}
+						iconElementRight={
+							<div>
+								<IconButton
+									iconStyle={{width: 48, height: 48, color: 'white'}}
+									style={{width: 48, height: 48, padding: 0, margin: 0}}
+									onClick={() => {
+										this.props.dispatch(actions.logout());
+									}}
+								><ExitIcon /></IconButton>
+							</div>
+						}
+					/>
+					{page}
+				</div>
+			);
 		}
 
 		const {selectedReddit, posts, isFetching, lastUpdated} = this.props;

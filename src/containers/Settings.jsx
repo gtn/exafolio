@@ -5,6 +5,8 @@ import * as actions from '/actions';
 import Modal from '../components/Modal';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import DoneIcon from 'material-ui/svg-icons/action/done';
+import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
 
 class Settings extends Component {
 	constructor(props) {
@@ -86,6 +88,7 @@ class Settings extends Component {
 						type="submit"
 						fullWidth={true}
 						style={{marginTop: '20px'}}
+					  icon={<DoneIcon/>}
 					/>
 
 					<RaisedButton
@@ -96,6 +99,7 @@ class Settings extends Component {
 						fullWidth={true}
 						style={{marginTop: '20px'}}
 					  type="button"
+					  icon={<CancelIcon/>}
 					/>
 				</Modal>
 			</form>

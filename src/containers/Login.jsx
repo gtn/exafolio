@@ -2,11 +2,13 @@ import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator'
 import * as actions from '/actions';
 import TextField from 'material-ui/TextField';
-import ActionAndroid from 'material-ui/svg-icons/action/android';
+import LoginIcon from 'material-ui/svg-icons/navigation/arrow-forward';
+import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import RaisedButton from 'material-ui/RaisedButton';
 import Modal from '/components/Modal';
 import {connect} from 'react-redux';
 import {pageSelector} from '/selectors';
+import LinearProgress from 'material-ui/LinearProgress';
 
 // remember the state
 let state = {
@@ -61,7 +63,9 @@ class Login extends Component {
 			<form onSubmit={this.submit}>
 				<Modal header="Login">
 					{ this.state.loading &&
-					<div>Loading...</div>
+					<div>Loading...
+						<LinearProgress mode="indeterminate"/>
+					</div>
 					}
 
 					<TextField
@@ -87,7 +91,7 @@ class Login extends Component {
 					<RaisedButton
 						label="Login"
 						primary={true}
-						icon={<ActionAndroid />}
+						icon={<LoginIcon />}
 						type="submit"
 						fullWidth={true}
 						style={{marginTop: '20px'}}
@@ -98,6 +102,7 @@ class Login extends Component {
 						onClick={() => {
 							this.props.dispatch(actions.switchPage('settings'));
 						}}
+						icon={<SettingsIcon />}
 						fullWidth={true}
 						style={{marginTop: '20px'}}
 					/>

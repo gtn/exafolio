@@ -23,7 +23,13 @@
       }]]
     },
     "production": {
-      "plugins": ["transform-decorators-legacy", "material-ui"]
+      "plugins": [
+        ["babel-root-slash-import", {
+          "rootPathSuffix": "src"
+        }],
+        "transform-decorators-legacy",
+        "material-ui"
+      ]
     }
   }
 }
