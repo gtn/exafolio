@@ -59,10 +59,17 @@ class Login extends Component {
 	render() {
 		const {fieldValues} = this.state;
 
+		let header;
+		if (this.props.config.moodleName) {
+			header = 'Login to '+this.props.config.moodleName;
+		} else {
+			header = 'Login';
+		}
+
 		return (
 			<form onSubmit={this.submit}>
-				<Modal header="Login">
-					{ this.state.loading &&
+				<Modal header={header}>
+					{this.state.loading &&
 					<div>Loading...
 						<LinearProgress mode="indeterminate"/>
 					</div>
@@ -119,5 +126,6 @@ Login.propTypes = {
 */
 
 export default connect(state => ({
-	page: pageSelector(state, 'login')
+	page: pageSelector(state, 'login'),
+	config: state.config
 }))(Login);

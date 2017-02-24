@@ -24,6 +24,15 @@ export function login(form, data) {
 	}
 }
 
+export function loadPortfolioItems() {
+	return dispatch =>
+		webservice.wsfunction('block_exaport_get_all_items')
+			.then(categories => dispatch({
+				type: consts.PORTFOLIO_ITEMS_LOADED,
+				categories
+			}));
+}
+
 export function loadCourses() {
 	return dispatch =>
 		webservice.wsfunction('dakora_get_courses')
@@ -41,9 +50,9 @@ export function loginError(error) {
 };
 
 export function loginSuccess(data) {
-	return Object.assign({
+	return Object.assign(data, {
 		type: consts.LOGGEDIN,
-	}, data);
+	});
 };
 
 export function logout() {
@@ -57,6 +66,22 @@ export function setConfig(data) {
 		type: consts.SET_CONFIG,
 		data
 	};
+};
+
+export function testConnection(form) {
+	return dispatch => {
+		return webservice.login({testconnection: true})
+			.then(data => {
+				// call successful, probably got login error, but that's right
+				form.setState({loading: false});
+				dispatch(setConfig({moodleName: data.moodleName}));
+				dispatch(switchPage('login'));
+			})
+			.catch(() => {
+				// couldn't connect to server
+				form.setState({loading: false, fieldErrors: {moodleUrl: 'could not connect'}});
+			});
+	}
 };
 
 export function switchPage(page, data = {}) {

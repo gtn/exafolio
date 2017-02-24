@@ -4,7 +4,16 @@ import store from './store'
 class webservice {
 	moodleurl(suburl = '') {
 		const state = store.getState();
-		return (state.config.moodleUrl || '').replace(/\/+$/, '') + suburl;
+
+		let moodleUrl = (state.config.moodleUrl || document.location.href);
+
+		if (!moodleUrl.match(/(:\/\/|^\/)/)) {
+			// not containing :// and not starting with /
+			moodleUrl = 'http://' + moodleUrl;
+		}
+
+		moodleUrl = moodleUrl.replace(/(\/my)?\/+$/, '');
+		return moodleUrl + suburl;
 	}
 
 	post(url, data = {}) {
@@ -15,14 +24,13 @@ class webservice {
 
 		return fetch(url, {
 			method: 'POST',
-			body: form
+			body: form,
 		});
 	}
 
 	login(data) {
-		return this.post(this.moodleurl('/blocks/exacomp/token.php'), {
-			username: data.username,
-			password: data.password,
+		return this.post(this.moodleurl('/blocks/exaport/token.php'), {
+			...data,
 			services: 'moodle_mobile_app,exacompservices,exaportservices'
 		})
 			.then(req => req.json());
@@ -31,12 +39,12 @@ class webservice {
 	wsfunction(wsfunction, data = {}) {
 		const state = store.getState();
 
-		console.log(state.tokens);
+		let wstoken = wsfunction.match(/^block_exaport_/) ? state.tokens.exaportservices : state.tokens.exacompservices;
 
 		return this.post(this.moodleurl('/webservice/rest/server.php'), {
 			...data,
 			moodlewsrestformat: 'json',
-			wstoken: state.tokens.exacompservices,
+			wstoken,
 			wsfunction
 		})
 			.then(req => req.json())

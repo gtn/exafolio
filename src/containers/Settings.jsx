@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import DoneIcon from 'material-ui/svg-icons/action/done';
 import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
+import LinearProgress from 'material-ui/LinearProgress';
 
 class Settings extends Component {
 	constructor(props) {
@@ -14,24 +15,22 @@ class Settings extends Component {
 
 		this.state = {
 			fieldValues: Object.assign({}, this.props.config),
-			fieldErrors: {}
-		}
-
-		console.log('constructor', this.state);
-	}
-
-	componentDidMount() {
-		console.log('didmount', this.state);
+			fieldErrors: {},
+			loading: false,
+		};
 	}
 
 	@autobind
 	submit(e) {
 		e.preventDefault();
 
-		if (this.checkFields()) {
-			this.props.dispatch(actions.setConfig(this.state.fieldValues))
-			this.props.dispatch(actions.switchPage('login'));
+		if (!this.checkFields()) {
+			return;
 		}
+
+		this.props.dispatch(actions.setConfig({...this.state.fieldValues}));
+		this.setState({loading: true});
+		this.props.dispatch(actions.testConnection(this));
 	}
 
 	@autobind
@@ -48,9 +47,6 @@ class Settings extends Component {
 		fieldErrors = {};
 
 		fieldValues.moodleUrl = fieldValues.moodleUrl ? fieldValues.moodleUrl.trim() : '';
-		if (!fieldValues.moodleUrl.match(/(\/\/|^\/)/)) {
-			fieldErrors.moodleUrl = 'Keine Adresse';
-		}
 
 		this.setState({fieldValues, fieldErrors});
 
@@ -64,12 +60,17 @@ class Settings extends Component {
 		return (
 			<form onSubmit={this.submit} className="exa-modal-frame">
 				<Modal header="Settings">
+					{ this.state.loading &&
+					<div>Saving...
+						<LinearProgress mode="indeterminate"/>
+					</div>
+					}
 					<TextField
 						floatingLabelText="Moodle Adresse"
 						errorText={fieldErrors.moodleUrl}
 						fullWidth={true}
 						name="moodleUrl"
-						defaultValue={fieldValues.moodleUrl || ''}
+						value={fieldValues.moodleUrl}
 						onChange={this.handleChange}
 					/>
 
@@ -78,7 +79,7 @@ class Settings extends Component {
 						errorText={fieldErrors.anotherOption}
 						fullWidth={true}
 						name="anotherOption"
-						defaultValue={fieldValues.anotherOption || ''}
+						defaultValue={fieldValues.anotherOption}
 						onChange={this.handleChange}
 					/>
 
@@ -88,7 +89,7 @@ class Settings extends Component {
 						type="submit"
 						fullWidth={true}
 						style={{marginTop: '20px'}}
-					  icon={<DoneIcon/>}
+						icon={<DoneIcon/>}
 					/>
 
 					<RaisedButton
@@ -98,8 +99,8 @@ class Settings extends Component {
 						}}
 						fullWidth={true}
 						style={{marginTop: '20px'}}
-					  type="button"
-					  icon={<CancelIcon/>}
+						type="button"
+						icon={<CancelIcon/>}
 					/>
 				</Modal>
 			</form>
@@ -108,6 +109,5 @@ class Settings extends Component {
 }
 
 export default connect(state => ({
-	x: console.log(state),
 	config: state.config,
 }))(Settings);

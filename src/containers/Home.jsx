@@ -1,98 +1,77 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '/actions';
-import {List, ListItem} from 'material-ui/List';
+import {List, ListItem, makeSelectable} from 'material-ui/List';
 import {pageSelector} from '/selectors';
 import Menu from '/components/Menu';
-import ContentInbox from 'material-ui/svg-icons/content/inbox';
+import ItemTypeFileIcon from 'material-ui/svg-icons/av/note';
+import MenuItemIcon from 'material-ui/svg-icons/file/folder';
+
+let SelectableList = makeSelectable(List);
 
 class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
 	componentDidMount() {
-		this.props.dispatch(actions.loadCourses());
+		this.props.dispatch(actions.loadPortfolioItems());
+	}
+
+	printTree(children) {
+		return children.map(item =>
+			<ListItem
+				key={item.id}
+				value={item}
+				primaryText={item.name}
+				leftIcon={<MenuItemIcon />}
+				primaryTogglesNestedList={false}
+				nestedItems={this.printTree(item.children)}
+			/>);
 	}
 
 	render() {
+		let {selectedCategory} = this.state;
+		if (!selectedCategory) {
+			selectedCategory = this.props.portfolioCategoryTree[0];
+		}
+		let content = null;
+
+		if (selectedCategory) {
+			content = (
+				<div>
+					<h2>{selectedCategory.name}</h2>
+					<List>
+						{selectedCategory.items.length ?
+							selectedCategory.items.map((item, i) =>
+								<ListItem
+									leftIcon={<ItemTypeFileIcon/>}
+									key={item.id}
+									style={{cursor: 'pointer'}}
+									primaryText={item.name}/>
+							) :
+							<ListItem
+								key="empty"
+								primaryText="Keine Einträge vorhanden"/>
+						}
+					</List>
+				</div>
+			)
+		}
+
 		return (
 			<div>
 				<Menu>
-					<List>
-						<ListItem
-							primaryText="Menu"
-							leftIcon={<ContentInbox />}
-							primaryTogglesNestedList={true}
-							nestedItems={[
-								<ListItem
-									key={1}
-									primaryText="Starred"
-									leftIcon={<ContentInbox />}
-								/>,
-								<ListItem
-									key={2}
-									primaryText="Sent Mail"
-									leftIcon={<ContentInbox />}
-									primaryTogglesNestedList={true}
-									nestedItems={[
-										<ListItem key={1} primaryText="Drafts" leftIcon={<ContentInbox />}/>,
-									]}
-								/>
-							]}
-						/>
-						<ListItem
-							primaryText="Menu"
-							leftIcon={<ContentInbox />}
-							primaryTogglesNestedList={true}
-							nestedItems={[
-								<ListItem
-									key={1}
-									primaryText="Starred"
-									leftIcon={<ContentInbox />}
-								/>,
-								<ListItem
-									key={2}
-									primaryText="Sent Mail"
-									leftIcon={<ContentInbox />}
-									primaryTogglesNestedList={true}
-									nestedItems={[
-										<ListItem key={1} primaryText="Drafts" leftIcon={<ContentInbox />}/>,
-									]}
-								/>
-							]}
-						/>
-						<ListItem
-							primaryText="Menu"
-							leftIcon={<ContentInbox />}
-							primaryTogglesNestedList={true}
-							nestedItems={[
-								<ListItem
-									key={1}
-									primaryText="Starred"
-									leftIcon={<ContentInbox />}
-								/>,
-								<ListItem
-									key={2}
-									primaryText="Sent Mail"
-									leftIcon={<ContentInbox />}
-									primaryTogglesNestedList={true}
-									nestedItems={[
-										<ListItem key={1} primaryText="Drafts" leftIcon={<ContentInbox />}/>,
-									]}
-								/>
-							]}
-						/>
-					</List>
+					<SelectableList
+						value={selectedCategory}
+						onChange={(event, value) => this.setState({selectedCategory: value})}
+					>
+						{this.props.portfolioCategoryTree && this.printTree(this.props.portfolioCategoryTree)}
+					</SelectableList>
 				</Menu>
 				<Menu.PageContent>
-					{this.props.courses.length > 0 &&
-					<List>
-						{this.props.courses.map((course, i) =>
-							<ListItem
-								key={i}
-								onClick={() => this.props.dispatch(actions.switchPage('coursedetail', {course}))}
-								style={{cursor: 'pointer'}}
-								primaryText={course.fullname}/>
-						)}
-					</List>
-					}
+					{content}
 				</Menu.PageContent>
 			</div>
 		);
@@ -102,4 +81,5 @@ class Home extends Component {
 export default connect(state => ({
 	page: pageSelector(state, 'home'),
 	courses: state.user.dakoracourses,
+	portfolioCategoryTree: state.portfolioCategoryTree,
 }))(Home);
