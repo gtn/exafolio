@@ -6,6 +6,7 @@ import {pageSelector} from '/selectors';
 import Menu from '/components/Menu';
 import ItemTypeFileIcon from 'material-ui/svg-icons/av/note';
 import MenuItemIcon from 'material-ui/svg-icons/file/folder';
+import sanitizeHtml from 'sanitize-html';
 
 let SelectableList = makeSelectable(List);
 
@@ -16,7 +17,7 @@ class Home extends Component {
 	}
 
 	componentDidMount() {
-		this.props.dispatch(actions.loadPortfolioItems());
+		this.props.dispatch(actions.loadPortfolioCategories());
 	}
 
 	printTree(children) {
@@ -49,7 +50,15 @@ class Home extends Component {
 									leftIcon={<ItemTypeFileIcon/>}
 									key={item.id}
 									style={{cursor: 'pointer'}}
-									primaryText={item.name}/>
+									primaryText={<div>{item.name}
+										<div>File: <a href={item.file} target="_blank">{item.filename}</a></div>
+										{item.isimage &&
+											<img style={{maxWidth: '200px', maxHeight: '200px'}} src={item.file}/>
+										}
+										<div dangerouslySetInnerHTML={{__html: sanitizeHtml(item.intro)}}></div>
+									</div>
+									}
+								/>
 							) :
 							<ListItem
 								key="empty"

@@ -2,6 +2,7 @@ import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from './reducers';
 import * as storage from 'redux-storage'
+import debounce from 'redux-storage-decorator-debounce'
 
 /* *
 const loggerMiddleware = createLogger();
@@ -31,7 +32,10 @@ const reducer = storage.reducer(rootReducer);
 //
 // Note: The arguments to `createEngine` are different for every engine!
 import createEngine from 'redux-storage-engine-localstorage';
-const engine = createEngine('my-save-key');
+let engine = createEngine('exafolio');
+
+// nicht jedesmal gleich state in session speichern, sondern erst nach 500ms inaktivität
+engine = debounce(engine, 500);
 
 // And with the engine we can create our middleware function. The middleware
 // is responsible for calling `engine.save` with the current state afer
@@ -47,13 +51,14 @@ let middlewares = [
 ];
 
 if (process.env.NODE_ENV !== 'production') {
-  let createLogger = require('redux-logger');
-  middlewares.push(createLogger());
+	let createLogger = require('redux-logger');
+	middlewares.push(createLogger());
 }
 
 // As everything is prepared, we can go ahead and combine all parts as usual
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
-const store = createStoreWithMiddleware(reducer);
+const store = createStoreWithMiddleware(reducer,
+	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 // At this stage the whole system is in place and every action will trigger
 // a save operation.
@@ -71,7 +76,7 @@ load(store);
 // Notice that our load function will return a promise that can also be used
 // to respond to the restore event.
 load(store)
-	// .then((newState) => console.log('Loaded state:', newState))
+// .then((newState) => console.log('Loaded state:', newState))
 	.then(() => console.log('Loaded last app state'))
 	.catch(() => console.log('Failed to load previous state'));
 

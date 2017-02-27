@@ -12,10 +12,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 
 // remember the state
 let state = {
-	fieldValues: {
-		username: 'teacher',
-		password: 'teacher',
-	},
+	fieldValues: {},
 	loading: false,
 	error: null
 };
@@ -26,6 +23,7 @@ class Login extends Component {
 
 		// set the initial component state
 		this.state = state;
+		// this.state.fieldValues.username =
 	}
 
 	@autobind
@@ -56,12 +54,23 @@ class Login extends Component {
 		state = this.state;
 	}
 
+	componentDidMount() {
+		this.componentWillReceiveProps(this.props);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		const {fieldValues} = this.state;
+		if (!fieldValues.username && nextProps.config.lastUsername) {
+			this.setState({fieldValues: {... fieldValues, username: nextProps.config.lastUsername}});
+		}
+	}
+
 	render() {
 		const {fieldValues} = this.state;
 
 		let header;
 		if (this.props.config.moodleName) {
-			header = 'Login to '+this.props.config.moodleName;
+			header = 'Login to ' + this.props.config.moodleName;
 		} else {
 			header = 'Login';
 		}
@@ -77,21 +86,19 @@ class Login extends Component {
 
 					<TextField
 						floatingLabelText="Username"
-						ref={input => this.usernameInput = input}
-						errorText={this.state.error}
+						errorText={this.state.error || this.props.page.error}
 						fullWidth={true}
 						name="username"
-						defaultValue={fieldValues.username}
+						value={fieldValues.username || ''}
 						onChange={this.handleChange}
 					/>
 
 					<TextField
 						floatingLabelText="Password"
-						ref={input => this.passwordInput = input}
 						type="password"
 						fullWidth={true}
 						name="password"
-						defaultValue={fieldValues.password}
+						value={fieldValues.password || ''}
 						onChange={this.handleChange}
 					/>
 
@@ -118,12 +125,6 @@ class Login extends Component {
 		);
 	}
 }
-
-/*
-Login.propTypes = {
-	onSubmit: PropTypes.func.isRequired,
-}
-*/
 
 export default connect(state => ({
 	page: pageSelector(state, 'login'),

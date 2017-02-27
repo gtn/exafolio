@@ -1,4 +1,5 @@
 import {combineReducers} from 'redux';
+import { LOAD, SAVE } from 'redux-storage';
 import * as consts from '/consts';
 
 function isLoggedin(state = false, action) {
@@ -11,7 +12,16 @@ function isLoggedin(state = false, action) {
 }
 
 function pageLogin(state = {}, action) {
-	return state;
+	switch (action.type) {
+		case consts.LOGIN_ERROR:
+			return {...state, error: action.error};
+		case consts.LOGGEDIN:
+			return {...state, error: null};
+		case LOAD:
+			return {};
+		default:
+			return state;
+	}
 }
 
 function currentPage(state = '', action) {
@@ -25,7 +35,7 @@ function currentPage(state = '', action) {
 
 function pageCourseDetail(state = {}, action) {
 	if (action.type == consts.SWITCH_PAGE && action.page == 'coursedetail') {
-		return Object.assign({}, state, action.data);
+		return {...state, ...action.data};
 	} else {
 		return state;
 	}
@@ -74,7 +84,7 @@ function config(state = {}, action) {
 
 function portfolioCategoryTree(state = [], action) {
 	switch (action.type) {
-		case consts.PORTFOLIO_ITEMS_LOADED:
+		case consts.PORTFOLIO_CATEGORIES_LOADED:
 			let categoriesById = {};
 			let categoryTree = [];
 
@@ -99,7 +109,7 @@ function portfolioCategoryTree(state = [], action) {
 
 function portfolioCategoriesById(state = {}, action) {
 	switch (action.type) {
-		case consts.PORTFOLIO_ITEMS_LOADED:
+		case consts.PORTFOLIO_CATEGORIES_LOADED:
 			let categoriesById = {};
 			action.categories.forEach((category) => categoriesById[category.id] = category);
 
@@ -109,12 +119,15 @@ function portfolioCategoriesById(state = {}, action) {
 	}
 }
 
-function clearOnLoggout(reducers) {
-	let result = {};
-	for (var key in reducers) {
-		let func = reducers[key];
+let pages = combineReducers({
+	login: pageLogin,
+	coursedetail: clearOnLoggout(pageCourseDetail),
+});
 
-		result[key] = function (state = {}, action) {
+function clearOnLoggout(arg) {
+	if (typeof arg == 'function') {
+		let func = arg;
+		return function (state = {}, action) {
 			switch (action.type) {
 				case consts.LOGGEDOUT:
 				case consts.LOGIN_ERROR:
@@ -123,22 +136,49 @@ function clearOnLoggout(reducers) {
 				default:
 					return func.apply(this, arguments);
 			}
-		}
+		};
+	}
+
+	let reducers = arg, result = {};
+	for (var key in reducers) {
+		let func = reducers[key];
+
+		result[key] = clearOnLoggout(func);
 	}
 
 	return result;
 }
 
-export default combineReducers(Object.assign({
-	config,
-	currentPage,
-	pageLogin,
-}, clearOnLoggout({
-	isLoggedin,
-	user,
-	moodleconfig,
-	tokens,
-	portfolioCategoriesById,
-	portfolioCategoryTree,
-	pageCourseDetail,
-})));
+let reducers = combineReducers(
+	Object.assign({
+			config,
+			currentPage,
+			pages,
+		},
+		clearOnLoggout({
+			isLoggedin,
+			user,
+			moodleconfig,
+			tokens,
+			portfolioCategoriesById,
+			portfolioCategoryTree,
+		})
+	));
+
+
+export default function rootReducer(oldState = {}, action) {
+	// TODO: could test if oldState <> newState
+	let state = Object.assign({}, reducers.apply(this, arguments));
+
+	if (!state.isLoggedin) {
+		if (['login', 'settings'].indexOf(state.currentPage) < 0) {
+			state.currentPage = 'login';
+		}
+	} else {
+		if (['home', 'course', 'courseDetail'].indexOf(state.currentPage) < 0) {
+			state.currentPage = 'home';
+		}
+	}
+
+	return state;
+}

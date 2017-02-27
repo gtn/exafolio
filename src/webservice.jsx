@@ -1,7 +1,16 @@
 import fetch from 'isomorphic-fetch';
 import store from './store'
+import * as actions from '/actions';
 
-class webservice {
+class WebserviceException {
+	constructor(data) {
+		for (var key in data) {
+			this[key] = data[key];
+		}
+	}
+}
+
+class Webservice {
 	moodleurl(suburl = '') {
 		const state = store.getState();
 
@@ -48,15 +57,24 @@ class webservice {
 			wsfunction
 		})
 			.then(req => req.json())
-			.then((response) => {
+			.then(response => {
 				if (response.exception) {
-					throw new Error(JSON.stringify(response));
+					throw new WebserviceException(response);
 				}
 				return response;
+			})
+			.catch(exception=> {
+				if (exception instanceof WebserviceException && exception.errorcode == 'invalidtoken') {
+					// invalidtoken
+					store.dispatch(actions.loginError('login error'));
+					return Promise.reject('login error');
+				}
+
+				throw exception;
 			});
 	}
 }
 
-const wsInstance = new webservice();
+const wsInstance = new Webservice();
 
 export default wsInstance;
