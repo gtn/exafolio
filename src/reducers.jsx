@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import { LOAD, SAVE } from 'redux-storage';
 import * as consts from '/consts';
+import * as lib from '/lib';
 
 function isLoggedin(state = false, action) {
 	switch (action.type) {
@@ -71,7 +72,8 @@ function tokens(state = {}, action) {
 
 function config(state = {}, action) {
 	if (!state.moodleUrl) {
-		state.moodleUrl = document.location.href.replace(/\?.*/, '').replace(/\/exafolio\/*$/, '');
+		state.moodleUrl = lib.getDefaultMoodleUrl();
+		state.moodleName = lib.getDefaultSetting('moodleName');
 	}
 
 	switch (action.type) {

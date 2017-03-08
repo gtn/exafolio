@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator'
 import * as actions from '/actions';
+import * as lib from '/lib';
 import TextField from 'material-ui/TextField';
 import LoginIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
@@ -68,24 +69,28 @@ class Login extends Component {
 	render() {
 		const {fieldValues} = this.state;
 
-		let header;
-		if (this.props.config.moodleName) {
-			header = 'Login to ' + this.props.config.moodleName;
-		} else {
-			header = 'Login';
-		}
-
 		return (
 			<form onSubmit={this.submit}>
-				<Modal header={header}>
+				<Modal header="Login">
 					{this.state.loading &&
 					<div>Loading...
 						<LinearProgress mode="indeterminate"/>
 					</div>
 					}
 
+					{this.props.config.moodleUrl &&
 					<TextField
-						floatingLabelText="Username"
+						floatingLabelText="Server"
+						fullWidth={true}
+						value={(this.props.config.moodleName ? (this.props.config.moodleName + '\n') : '')
+						+ this.props.config.moodleUrl}
+						multiLine={true}
+						disabled={true}
+					/>
+					}
+
+					<TextField
+						floatingLabelText="Benutzer"
 						errorText={this.state.error || this.props.page.error}
 						fullWidth={true}
 						name="username"
@@ -94,7 +99,7 @@ class Login extends Component {
 					/>
 
 					<TextField
-						floatingLabelText="Password"
+						floatingLabelText="Passwort"
 						type="password"
 						fullWidth={true}
 						name="password"
@@ -120,6 +125,10 @@ class Login extends Component {
 						fullWidth={true}
 						style={{marginTop: '20px'}}
 					/>
+
+				<div style={{textAlign: 'center', color: 'grey', margin: '20px 0 -20px 0'}}>
+					Exafolio v{lib.getVersion()}
+				</div>
 				</Modal>
 			</form>
 		);

@@ -75,7 +75,7 @@ class Settings extends Component {
 					/>
 
 					<TextField
-						floatingLabelText="Weiter Option"
+						floatingLabelText="Weitere Option die nichts macht"
 						errorText={fieldErrors.anotherOption}
 						fullWidth={true}
 						name="anotherOption"

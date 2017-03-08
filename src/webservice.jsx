@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import store from './store'
 import * as actions from '/actions';
+import * as lib from '/lib';
 
 class WebserviceException {
 	constructor(data) {
@@ -14,7 +15,7 @@ class Webservice {
 	moodleurl(suburl = '') {
 		const state = store.getState();
 
-		let moodleUrl = (state.config.moodleUrl || document.location.href);
+		let moodleUrl = (state.config.moodleUrl || lib.getDefaultMoodleUrl());
 
 		if (!moodleUrl.match(/(:\/\/|^\/)/)) {
 			// not containing :// and not starting with /
@@ -39,8 +40,12 @@ class Webservice {
 
 	login(data) {
 		return this.post(this.moodleurl('/blocks/exaport/token.php'), {
+			username: '',
+			password: '',
 			...data,
-			services: 'moodle_mobile_app,exacompservices,exaportservices'
+			services: 'moodle_mobile_app,exacompservices,exaportservices',
+			app: 'exafolio',
+			app_version: lib.getVersion(),
 		})
 			.then(req => req.json());
 	}
