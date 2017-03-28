@@ -2,11 +2,14 @@ import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '/actions';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
+import Add from 'material-ui/svg-icons/content/add';
 import {pageSelector} from '/selectors';
 import Menu from '/components/Menu';
 import ItemTypeFileIcon from 'material-ui/svg-icons/av/note';
 import MenuItemIcon from 'material-ui/svg-icons/file/folder';
 import sanitizeHtml from 'sanitize-html';
+
 
 let SelectableList = makeSelectable(List);
 
@@ -42,7 +45,17 @@ class Home extends Component {
 		if (selectedCategory) {
 			content = (
 				<div>
-					<h2>{selectedCategory.name}</h2>
+					<div>
+					<h2 style={{display:"inline-block"}}>{selectedCategory.name}</h2>
+
+						<IconButton
+							iconStyle={{width: 48, height: 48, color: "rgb(0, 188, 212)"}}
+							style={{width: 48, height: 48, padding: 0, marginTop:"5px", float: "right"}}
+							onClick={() => {
+								this.props.dispatch(actions.switchPage('additem'));
+							}}
+						><Add /></IconButton>
+					</div>
 					<List>
 						{selectedCategory.items.length ?
 							selectedCategory.items.map((item, i) =>
@@ -50,6 +63,10 @@ class Home extends Component {
 									leftIcon={<ItemTypeFileIcon/>}
 									key={item.id}
 									style={{cursor: 'pointer'}}
+									onClick={() => {
+										this.props.dispatch(actions.switchPage('itemdetails', {item: item}));
+									}}
+
 									primaryText={<div>{item.name}
 										<div>File: <a href={item.file} target="_blank">{item.filename}</a></div>
 										{item.isimage &&

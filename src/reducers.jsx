@@ -41,7 +41,15 @@ function pageCourseDetail(state = {}, action) {
 		return state;
 	}
 }
-
+/*
+function pageItemDetails(state = {}, action) {
+    if (action.type == consts.SWITCH_PAGE && action.page == 'itemdetails') {
+        return {...state, ...action.data};
+    } else {
+        return state;
+    }
+}
+*/
 
 function user(state = {}, action) {
 	switch (action.type) {
@@ -124,6 +132,7 @@ function portfolioCategoriesById(state = {}, action) {
 let pages = combineReducers({
 	login: pageLogin,
 	coursedetail: clearOnLoggout(pageCourseDetail),
+   // itemdetails: clearOnLoggout(pageItemDetails),
 });
 
 function clearOnLoggout(arg) {
@@ -177,7 +186,7 @@ export default function rootReducer(oldState = {}, action) {
 			state.currentPage = 'login';
 		}
 	} else {
-		if (['home', 'course', 'courseDetail'].indexOf(state.currentPage) < 0) {
+		if (['home', 'itemdetails','additem'].indexOf(state.currentPage) < 0) {
 			state.currentPage = 'home';
 		}
 	}

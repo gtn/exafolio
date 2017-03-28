@@ -9,7 +9,8 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import '/css/styles.css';
 import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
-
+import AddItem from './AddItem';
+import ItemDetails from './ItemDetails';
 
 // Needed for onTouchTap
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -30,6 +31,11 @@ class App extends Component {
 			page = <CourseDetail/>;
 		} else if (this.props.currentPage == 'home') {
 			page = <Home/>;
+		}else if (this.props.currentPage == 'itemdetails') {
+			page = <ItemDetails/>;
+		}
+		else if (this.props.currentPage == 'additem') {
+			page = <AddItem/>;
 		}
 
 		return (
@@ -50,7 +56,9 @@ class App extends Component {
 						</div>
 					}
 				/>
+				<div style={{marginTop:"64px"}}>
 				{page}
+				</div>
 			</div>
 		);
 	}

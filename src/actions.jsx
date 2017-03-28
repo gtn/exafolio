@@ -85,6 +85,7 @@ export function testConnection(form) {
 	}
 };
 
+
 export function switchPage(page, data = {}) {
 	return {
 		type: consts.SWITCH_PAGE,
