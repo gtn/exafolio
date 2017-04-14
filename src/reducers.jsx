@@ -1,7 +1,9 @@
-import {combineReducers} from 'redux';
+import { createStore, combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 import { LOAD, SAVE } from 'redux-storage';
 import * as consts from '/consts';
 import * as lib from '/lib';
+
 
 function isLoggedin(state = false, action) {
 	switch (action.type) {
@@ -41,7 +43,7 @@ function pageCourseDetail(state = {}, action) {
 		return state;
 	}
 }
-/*
+
 function pageItemDetails(state = {}, action) {
     if (action.type == consts.SWITCH_PAGE && action.page == 'itemdetails') {
         return {...state, ...action.data};
@@ -49,7 +51,7 @@ function pageItemDetails(state = {}, action) {
         return state;
     }
 }
-*/
+
 
 function user(state = {}, action) {
 	switch (action.type) {
@@ -132,7 +134,7 @@ function portfolioCategoriesById(state = {}, action) {
 let pages = combineReducers({
 	login: pageLogin,
 	coursedetail: clearOnLoggout(pageCourseDetail),
-   // itemdetails: clearOnLoggout(pageItemDetails),
+    itemdetails: clearOnLoggout(pageItemDetails),
 });
 
 function clearOnLoggout(arg) {
