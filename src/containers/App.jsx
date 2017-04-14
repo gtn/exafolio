@@ -37,6 +37,10 @@ class App extends Component {
 		else if (this.props.currentPage == 'additem') {
 			page = <AddItem/>;
 		}
+		else if (this.props.currentPage == 'redux-form-example') {
+			page = <redux-form-example/>;
+		}
+
 
 		return (
 			<div>
