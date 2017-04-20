@@ -66,7 +66,6 @@ class ItemDetails extends Component {
 								/>
 								<br />
 								<Field
-
 									hintText="Insert here"
 									floatingLabelText="Link"
 									component={TextField}
@@ -80,15 +79,16 @@ class ItemDetails extends Component {
 									<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
 								</div>
 								<br />
-								<br />
-								<br />
-								<br />
-								<TextField
+								<Field
 									hintText="Insert here"
 									floatingLabelText="Comment"
 									multiLine={true}
+									component={TextField}
+									name="comment"
+									type="text"
+									//onChange={() => this.props.dispatch()}
 									rows={2}
-								/><br />
+								/>
 								<button type="submit" disabled={pristine || submitting}>Submit</button>
 								<button onClick={() => this.props.dispatch(actions.switchPage('home'))}>back</button>
 							</div>
