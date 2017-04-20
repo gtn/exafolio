@@ -76,7 +76,11 @@ class ItemDetails extends Component {
 								<br />
 								<div>
 									<p> Files: </p>
-									<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
+									{this.props.page.item.isimage ? (
+										<img src={this.props.page.item.file}/>
+									) : (
+										<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
+									)}
 								</div>
 								<br />
 								<Field
