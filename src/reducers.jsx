@@ -5,6 +5,13 @@ import * as consts from '/consts';
 import * as lib from '/lib';
 
 
+const reduxFormReducer = combineReducers({
+	form: formReducer
+});
+
+
+
+
 function isLoggedin(state = false, action) {
 	switch (action.type) {
 		case consts.LOGGEDIN:
@@ -135,6 +142,7 @@ let pages = combineReducers({
 	login: pageLogin,
 	coursedetail: clearOnLoggout(pageCourseDetail),
     itemdetails: clearOnLoggout(pageItemDetails),
+	form: formReducer
 });
 
 function clearOnLoggout(arg) {

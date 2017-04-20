@@ -39,7 +39,7 @@ class ItemDetails extends Component {
 
 
 			render() {
-				//let ItemDetails = props;
+				const data = this.props.page.item;
 					//const {handleSubmit, load, pristine, reset, submitting} = props
 				const { handleSubmit, pristine, reset, submitting }= this.props;
 					return (
@@ -49,17 +49,18 @@ class ItemDetails extends Component {
 									hintText="Insert here"
 									type="text"
 									component={TextField}
-									name="this.props.page.name"
+									name="data.name"
 									//onChange={() => this.props.dispatch()}
 									floatingLabelText="Title"
 								/>
+								<p> {data.name} </p>
 								<br />
 								<Field
 									hintText="Insert here"
 									floatingLabelText="Content"
 									multiLine={true}
 									component={TextField}
-									name="this.props.page.intro"
+									name="data.intro"
 									type="text"
 									//onChange={() => this.props.dispatch()}
 									rows={2}
@@ -115,7 +116,7 @@ class ItemDetails extends Component {
 
 ItemDetails = reduxForm({
 	form: 'ItemDetails'  // a unique identifier for this form
-})(ItemDetails)
+})(ItemDetails);
 
 export default connect(state => ({
 	page: pageSelector(state, 'itemdetails'),
