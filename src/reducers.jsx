@@ -142,7 +142,7 @@ let pages = combineReducers({
 	login: pageLogin,
 	coursedetail: clearOnLoggout(pageCourseDetail),
     itemdetails: clearOnLoggout(pageItemDetails),
-	form: formReducer
+
 });
 
 function clearOnLoggout(arg) {
@@ -175,6 +175,7 @@ let reducers = combineReducers(
 			config,
 			currentPage,
 			pages,
+			form: formReducer
 		},
 		clearOnLoggout({
 			isLoggedin,
@@ -183,7 +184,9 @@ let reducers = combineReducers(
 			tokens,
 			portfolioCategoriesById,
 			portfolioCategoryTree,
+
 		})
+
 	));
 
 

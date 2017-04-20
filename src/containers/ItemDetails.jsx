@@ -8,8 +8,7 @@ import FileUpload from 'material-ui/svg-icons/file/file-upload';
 import Menu from '/components/Menu';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 //import TextField from 'material-ui/TextField';
-import { reduxForm, Field } from 'redux-form'
-import { load as loadAccount } from '/reducers'
+import { reduxForm, Field} from 'redux-form'
 import {
 	Checkbox,
 	RadioButtonGroup,
@@ -39,48 +38,46 @@ class ItemDetails extends Component {
 
 
 			render() {
-				const data = this.props.page.item;
 					//const {handleSubmit, load, pristine, reset, submitting} = props
-				const { handleSubmit, pristine, reset, submitting }= this.props;
+				const { handleSubmit, pristine, reset, submitting, load, change }= this.props;
 					return (
-						<form onSubmit={handleSubmit}>
+							<form onSubmit={handleSubmit(data => {
+								console.log(data);
+							})}>
 							<div style={{marginLeft: "1%"}}>
 								<Field
 									hintText="Insert here"
 									type="text"
 									component={TextField}
-									name="data.name"
+									name="item.name"
 									//onChange={() => this.props.dispatch()}
 									floatingLabelText="Title"
 								/>
-								<p> {data.name} </p>
 								<br />
 								<Field
 									hintText="Insert here"
 									floatingLabelText="Content"
 									multiLine={true}
 									component={TextField}
-									name="data.intro"
+									name="item.intro"
 									type="text"
 									//onChange={() => this.props.dispatch()}
 									rows={2}
 								/>
 								<br />
-								<TextField
+								<Field
+
 									hintText="Insert here"
 									floatingLabelText="Link"
-									value={this.props.page.item.url}
+									component={TextField}
+									name="item.url"
+									type="text"
 								/>
 								<br />
 								<br />
 								<div>
-									<IconButton
-										iconStyle={{width: 48, height: 48, color: "rgb(0, 188, 212)"}}
-										style={{width: 48, height: 48, padding: 0, margin: 0}}
-										onClick={() => {
-											alert(1);
-										}}
-									><FileUpload /></IconButton>
+									<p> Files: </p>
+									<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
 								</div>
 								<br />
 								<br />
@@ -120,6 +117,9 @@ ItemDetails = reduxForm({
 
 export default connect(state => ({
 	page: pageSelector(state, 'itemdetails'),
-}))(ItemDetails);
+		initialValues: pageSelector(state, 'itemdetails')
+
+}),
+)(ItemDetails);
 
 
