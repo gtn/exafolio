@@ -39,7 +39,7 @@ class AddItem extends Component {
 
 	render() {
 		//const {handleSubmit, load, pristine, reset, submitting} = props
-		const { handleSubmit, pristine, reset, submitting, load, change }= this.props;
+		const { handleSubmit, pristine, reset, submitting, load, change, fields, values}= this.props;
 		return (
 			<form onSubmit={handleSubmit(data => {
 				console.log(data);
@@ -75,17 +75,14 @@ class AddItem extends Component {
 					<br />
 					<br />
 					<div>
-						<Field
+						<input
 							type="file"
-							component="input"
-							name="file"
 							onChange={
 								( e ) => {
 									e.preventDefault();
-									const { fields } = this.props;
 									// convert files to an array
-									const files = [ ...e.target.files ];
-									fields.yourField.handleChange(files);
+									console.log(e.target.files);
+									fields.file.onChange(e.target.files);
 								}
 							}
 						/>
