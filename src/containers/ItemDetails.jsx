@@ -43,6 +43,7 @@ class ItemDetails extends Component {
 					return (
 							<form onSubmit={handleSubmit(data => {
 								console.log(data);
+								//this.props.dispatch(actions.changeDetails(data));
 							})}>
 							<div style={{marginLeft: "1%"}}>
 								<Field

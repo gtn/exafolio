@@ -50,6 +50,7 @@ export function loginError(error) {
 	};
 };
 
+
 export function loginSuccess(data) {
 	return Object.assign(data, {
 		type: consts.LOGGEDIN,
@@ -84,6 +85,22 @@ export function testConnection(form) {
 			});
 	}
 };
+
+export function changeDetails(data) {
+	return (dispatch, getState) => {
+		return webservice.post(state.config.moodleUrl, data)
+			.then(data => {
+				// call successful, probably got login error, but that's right
+				form.setState({loading: false});
+				alert();
+				dispatch(switchPage('home'));
+			})
+			.catch(() => {
+				// couldn't connect to server
+				form.setState({loading: false, fieldErrors: {moodleUrl: 'could not post'}});
+			});
+	}
+}
 
 
 export function switchPage(page, data = {}) {
