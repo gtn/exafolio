@@ -48,6 +48,7 @@ class AddItem extends Component {
 		return (
 			<form onSubmit={handleSubmit(data => {
 				console.log(data);
+				this.props.dispatch(actions.addItem(data));
 			})}>
 				<div style={{marginLeft: "1%"}}>
 					<Field
@@ -84,7 +85,7 @@ class AddItem extends Component {
 							name="file"
 							type="file"
 							component={customFileInput}/>
-						
+
 
 			</div>
 					<br />

@@ -87,6 +87,15 @@ function changedetails(state = {}, action) {
     }
 }
 
+function addItem(state = {}, action) {
+    switch (action.type) {
+        case consts.ADD_ITEM:
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function tokens(state = {}, action) {
 	switch (action.type) {
 		case consts.LOGGEDIN:
@@ -194,6 +203,7 @@ let reducers = combineReducers(
 			portfolioCategoriesById,
 			portfolioCategoryTree,
             changedetails,
+            addItem,
 
 		})
 

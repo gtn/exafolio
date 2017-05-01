@@ -108,6 +108,15 @@ export function changeDetails(data) {
 	}*/
 }
 
+export function addItem(data) {
+	return dispatch =>
+		webservice.wsfunction('block_exaport_get_all_items')
+			.then(categories => dispatch({
+				type: consts.ADD_ITEM,
+				categories
+			}));
+}
+
 
 export function switchPage(page, data = {}) {
 	return {
