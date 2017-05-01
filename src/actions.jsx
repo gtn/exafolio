@@ -87,7 +87,13 @@ export function testConnection(form) {
 };
 
 export function changeDetails(data) {
-	return (dispatch, getState) => {
+	return dispatch =>
+		webservice.wsfunction('block_exaport_get_all_items')
+			.then(categories => dispatch({
+				type: consts.CHANGE_DETAILS,
+				categories
+			}));
+	/*return (dispatch, getState) => {
 		return webservice.post(state.config.moodleUrl, data)
 			.then(data => {
 				// call successful, probably got login error, but that's right
@@ -99,7 +105,7 @@ export function changeDetails(data) {
 				// couldn't connect to server
 				form.setState({loading: false, fieldErrors: {moodleUrl: 'could not post'}});
 			});
-	}
+	}*/
 }
 
 

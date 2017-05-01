@@ -70,12 +70,21 @@ function user(state = {}, action) {
 }
 
 function moodleconfig(state = {}, action) {
-	switch (action.type) {
-		case consts.LOGGEDIN:
-			return action.moodleconfig;
-		default:
-			return state;
-	}
+    switch (action.type) {
+        case consts.LOGGEDIN:
+            return action.moodleconfig;
+        default:
+            return state;
+    }
+}
+
+function changedetails(state = {}, action) {
+    switch (action.type) {
+        case consts.CHANGE_DETALIS:
+            return action.data;
+        default:
+            return state;
+    }
 }
 
 function tokens(state = {}, action) {
@@ -184,6 +193,7 @@ let reducers = combineReducers(
 			tokens,
 			portfolioCategoriesById,
 			portfolioCategoryTree,
+            changedetails,
 
 		})
 
