@@ -20,6 +20,11 @@ import {
 
 const { DOM: { input, select, textarea } } = React
 
+const customFileInput = (field) => {
+	delete field.input.value; // <-- just delete the value property
+	return <input type="file" id="file" {...field.input} />;
+};
+
 
 class AddItem extends Component {
 	constructor(props) {
@@ -75,18 +80,11 @@ class AddItem extends Component {
 					<br />
 					<br />
 					<div>
-						<input
+						<Field
+							name="file"
 							type="file"
-							onChange={
-								( e ) => {
-									e.preventDefault();
-									const { fields } = this.props;
-									// convert files to an array
-									console.log(e.target.files);
-									fields.file.onChange(e.target.files);
-								}
-							}
-						/>
+							component={customFileInput}/>
+						
 
 			</div>
 					<br />
