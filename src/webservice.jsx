@@ -53,7 +53,7 @@ class Webservice {
 	wsfunction(wsfunction, data = {}) {
 		const state = store.getState();
 
-		let wstoken = wsfunction.match(/^block_exaport_/) ? state.tokens.exaportservices : state.tokens.exacompservices;
+		let wstoken = wsfunction.match(/^block_exaport_/) ? state.tokens.exaportservices.token : state.tokens.exacompservices.token;
 
 		return this.post(this.moodleurl('/webservice/rest/server.php'), {
 			...data,
