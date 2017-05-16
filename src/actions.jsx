@@ -9,6 +9,11 @@ export function login(form, formData) {
 					data.moodleconfig = data.config;
 					delete data.config;
 
+					// index by id
+					let tokens = {};
+					data.tokens.forEach((token) => tokens[token.service] = token);
+					data.tokens = tokens;
+
 					form.setState({loading: false, error: null, fieldValues: {}});
 					dispatch(setConfig({lastUsername: data.user.username}));
 					dispatch(loginSuccess(data));
