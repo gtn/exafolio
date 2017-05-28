@@ -9,6 +9,7 @@ import Menu from '/components/Menu';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 //import TextField from 'material-ui/TextField';
 import { reduxForm, Field} from 'redux-form'
+import RichTextMarkdown from '/components/Rte';
 import {
 	Checkbox,
 	RadioButtonGroup,
@@ -22,6 +23,14 @@ const { DOM: { input, select, textarea } } = React
 
 
 class ItemDetails extends Component {
+
+	static propTypes = {
+		input: PropTypes.shape({
+			onChange: PropTypes.func.isRequired,
+			value: PropTypes.string
+		}).isRequired
+	}
+
 	constructor(props) {
 		super(props);
 
@@ -29,17 +38,28 @@ class ItemDetails extends Component {
 	}
 
 	componentDidMount() {
-		//this.props.dispatch(actions.loadPortfolioCategories());
-		//const data = this.props.page.item;
-		//console.log(data);
-		//const { item }= getState();
-		//console.log(item);
+		/*this.RichTextEditor = window.RichTextEditor
+		this.setState({
+			value: this.props.input.value ?
+				this.RichTextEditor.createValueFromString(this.props.input.value, 'markdown') :
+				this.RichTextEditor.createEmptyValue()
+		})*/
+	}
+
+	handleChange = value => {
+		this.setState({ value })
+		let markdown = value.toString('markdown')
+		if(markdown.length === 2 && markdown.charCodeAt(0) === 8203 && markdown.charCodeAt(1) === 10) {
+			markdown = ''
+		}
+		this.props.input.onChange(markdown)
 	}
 
 
 			render() {
 					//const {handleSubmit, load, pristine, reset, submitting} = props
 				const { handleSubmit, pristine, reset, submitting, load, change }= this.props;
+				const {RichTextEditor, state: { value }, handleChange} = this
 					return (
 							<form onSubmit={handleSubmit(data => {
 								console.log(data);
@@ -59,12 +79,15 @@ class ItemDetails extends Component {
 									hintText="Insert here"
 									floatingLabelText="Content"
 									multiLine={true}
-									component={TextField}
+									component={RichTextMarkdown}
 									name="item.intro"
 									type="text"
+									value={this.state.value}
+									onChange={this.onChange}
 									//onChange={() => this.props.dispatch()}
 									rows={2}
 								/>
+
 								<br />
 								<Field
 									hintText="Insert here"

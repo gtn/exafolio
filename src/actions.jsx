@@ -93,7 +93,7 @@ export function testConnection(form) {
 
 export function changeDetails(data) {
 	return dispatch =>
-		webservice.wsfunction('block_exaport_get_all_items')
+		webservice.wsfunction('block_exaport_update_item')
 			.then(categories => dispatch({
 				type: consts.CHANGE_DETAILS,
 				categories
