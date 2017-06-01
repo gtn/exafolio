@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react'
-import RichTextEditor from 'react-rte';
+var RichTextEditor;
+if (typeof(window) !== 'undefined') { RichTextEditor = require('react-rte').default; }
 
 class RichTextMarkdown extends Component {
 	static propTypes = {
@@ -16,7 +17,7 @@ class RichTextMarkdown extends Component {
 	}
 
 	componentDidMount() {
-		this.RichTextEditor = window.RichTextEditor
+		this.RichTextEditor = RichTextEditor;
 		this.setState({
 			value: this.props.input.value ?
 				this.RichTextEditor.createValueFromString(this.props.input.value, 'markdown') :

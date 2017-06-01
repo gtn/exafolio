@@ -82,8 +82,8 @@ class ItemDetails extends Component {
 									component={RichTextMarkdown}
 									name="item.intro"
 									type="text"
-									value={this.state.value}
-									onChange={this.onChange}
+									//value={this.state.value}
+									//onChange={this.onChange}
 									//onChange={() => this.props.dispatch()}
 									rows={2}
 								/>
