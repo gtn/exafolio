@@ -87,7 +87,7 @@ class AddItem extends Component {
 							component={customFileInput}/>
 
 
-			</div>
+					</div>
 					<br />
 					<br />
 					<button type="submit" disabled={pristine || submitting}>Submit</button>

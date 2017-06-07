@@ -25,6 +25,16 @@ class RichTextMarkdown extends Component {
 		})
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.submitSucceeded) {
+			this.setState({
+				value: this.props.input.value ?
+					this.RichTextEditor.createValueFromString(this.props.input.value, 'markdown') :
+					this.RichTextEditor.createEmptyValue()
+			})
+		}
+	}
+
 	handleChange = value => {
 		this.setState({ value })
 		let markdown = value.toString('markdown')

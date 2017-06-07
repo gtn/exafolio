@@ -21,15 +21,13 @@ import {
 
 const { DOM: { input, select, textarea } } = React
 
+const customFileInput = (field) => {
+	delete field.input.value; // <-- just delete the value property
+	return <input type="file" id="file" {...field.input} />;
+};
+
 
 class ItemDetails extends Component {
-
-	static propTypes = {
-		input: PropTypes.shape({
-			onChange: PropTypes.func.isRequired,
-			value: PropTypes.string
-		}).isRequired
-	}
 
 	constructor(props) {
 		super(props);
@@ -63,7 +61,8 @@ class ItemDetails extends Component {
 					return (
 							<form onSubmit={handleSubmit(data => {
 								console.log(data);
-								this.props.dispatch(actions.changeDetails(data));
+								data.item.title=data.item.name;
+								this.props.dispatch(actions.changeDetails(data.item));
 							})}>
 							<div style={{marginLeft: "1%"}}>
 								<Field
@@ -105,6 +104,14 @@ class ItemDetails extends Component {
 									) : (
 										<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
 									)}
+								</div>
+								<div>
+									<Field
+										name="file"
+										type="file"
+										component={customFileInput}/>
+
+
 								</div>
 								<br />
 								<Field

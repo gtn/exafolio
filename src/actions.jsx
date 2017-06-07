@@ -93,10 +93,10 @@ export function testConnection(form) {
 
 export function changeDetails(data) {
 	return dispatch =>
-		webservice.wsfunction('block_exaport_update_item')
-			.then(categories => dispatch({
+		webservice.wsfunction('block_exaport_update_item', data)
+			.then(data => dispatch({
 				type: consts.CHANGE_DETAILS,
-				categories
+				data
 			}));
 	/*return (dispatch, getState) => {
 		return webservice.post(state.config.moodleUrl, data)
@@ -115,10 +115,10 @@ export function changeDetails(data) {
 
 export function addItem(data) {
 	return dispatch =>
-		webservice.wsfunction('block_exaport_get_all_items')
-			.then(categories => dispatch({
+		webservice.wsfunction('block_exaport_get_all_items', data)
+			.then(data => dispatch({
 				type: consts.ADD_ITEM,
-				categories
+				data
 			}));
 }
 
