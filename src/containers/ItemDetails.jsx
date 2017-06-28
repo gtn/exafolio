@@ -35,102 +35,89 @@ class ItemDetails extends Component {
 		this.state = {};
 	}
 
-	componentDidMount() {
-		/*this.RichTextEditor = window.RichTextEditor
-		this.setState({
-			value: this.props.input.value ?
-				this.RichTextEditor.createValueFromString(this.props.input.value, 'markdown') :
-				this.RichTextEditor.createEmptyValue()
-		})*/
-	}
+		render()
+		{
+			//const {handleSubmit, load, pristine, reset, submitting} = props
+			const {handleSubmit, pristine, reset, submitting, load, change}= this.props;
+			const {RichTextEditor, state: {value}, handleChange} = this
+			return (
+				<form onSubmit={handleSubmit(data => {
+					//console.log(data);
+					var newData = {};
+					newData.id = data.item.id;
+					newData.title = data.item.name;
+					newData.url = data.item.url;
+					newData.intro = data.item.intro;
+					//newData.intro = newData.intro.createValueFromString(this.props.input.value, 'text');
+					newData.filename = data.item.filename;
+					newData.type = data.item.type;
+					//console.log(newData);
 
-	handleChange = value => {
-		this.setState({ value })
-		let markdown = value.toString('markdown')
-		if(markdown.length === 2 && markdown.charCodeAt(0) === 8203 && markdown.charCodeAt(1) === 10) {
-			markdown = ''
+					this.props.dispatch(actions.changeDetails(newData));
+				})}>
+					<div style={{marginLeft: "1%"}}>
+						<Field
+							hintText="Insert here"
+							type="text"
+							component={TextField}
+							name="item.name"
+							//onChange={() => this.props.dispatch()}
+							floatingLabelText="Title"
+						/>
+						<br />
+						<Field
+							hintText="Insert here"
+							floatingLabelText="Content"
+							multiLine={true}
+							component={RichTextMarkdown}
+							name="item.intro"
+							type="text"
+							rows={2}
+						/>
+
+						<br />
+						<Field
+							hintText="Insert here"
+							floatingLabelText="Link"
+							component={TextField}
+							name="item.url"
+							type="text"
+						/>
+						<br />
+						<br />
+						<div>
+							<p> Files: </p>
+							{this.props.page.item.isimage ? (
+								<img src={this.props.page.item.file}/>
+							) : (
+								<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
+							)}
+						</div>
+						<div>
+							<Field
+								name="file"
+								type="file"
+								component={customFileInput}/>
+
+
+						</div>
+						<br />
+						<Field
+							hintText="Insert here"
+							floatingLabelText="Comment"
+							multiLine={true}
+							component={TextField}
+							name="comment"
+							type="text"
+							//onChange={() => this.props.dispatch()}
+							rows={2}
+						/>
+						<button type="submit" disabled={pristine || submitting}>Submit</button>
+						<button onClick={() => this.props.dispatch(actions.switchPage('home'))}>back</button>
+					</div>
+				</form>
+			);
 		}
-		this.props.input.onChange(markdown)
-	}
-
-
-			render() {
-					//const {handleSubmit, load, pristine, reset, submitting} = props
-				const { handleSubmit, pristine, reset, submitting, load, change }= this.props;
-				const {RichTextEditor, state: { value }, handleChange} = this
-					return (
-							<form onSubmit={handleSubmit(data => {
-								console.log(data);
-								data.item.title=data.item.name;
-								this.props.dispatch(actions.changeDetails(data.item));
-							})}>
-							<div style={{marginLeft: "1%"}}>
-								<Field
-									hintText="Insert here"
-									type="text"
-									component={TextField}
-									name="item.name"
-									//onChange={() => this.props.dispatch()}
-									floatingLabelText="Title"
-								/>
-								<br />
-								<Field
-									hintText="Insert here"
-									floatingLabelText="Content"
-									multiLine={true}
-									component={RichTextMarkdown}
-									name="item.intro"
-									type="text"
-									//value={this.state.value}
-									//onChange={this.onChange}
-									//onChange={() => this.props.dispatch()}
-									rows={2}
-								/>
-
-								<br />
-								<Field
-									hintText="Insert here"
-									floatingLabelText="Link"
-									component={TextField}
-									name="item.url"
-									type="text"
-								/>
-								<br />
-								<br />
-								<div>
-									<p> Files: </p>
-									{this.props.page.item.isimage ? (
-										<img src={this.props.page.item.file}/>
-									) : (
-										<a href={this.props.page.item.file}>{this.props.page.item.filename}</a>
-									)}
-								</div>
-								<div>
-									<Field
-										name="file"
-										type="file"
-										component={customFileInput}/>
-
-
-								</div>
-								<br />
-								<Field
-									hintText="Insert here"
-									floatingLabelText="Comment"
-									multiLine={true}
-									component={TextField}
-									name="comment"
-									type="text"
-									//onChange={() => this.props.dispatch()}
-									rows={2}
-								/>
-								<button type="submit" disabled={pristine || submitting}>Submit</button>
-								<button onClick={() => this.props.dispatch(actions.switchPage('home'))}>back</button>
-							</div>
-						</form>
-					);
-				}
-
 
 
 }

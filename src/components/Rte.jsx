@@ -20,7 +20,7 @@ class RichTextMarkdown extends Component {
 		this.RichTextEditor = RichTextEditor;
 		this.setState({
 			value: this.props.input.value ?
-				this.RichTextEditor.createValueFromString(this.props.input.value, 'markdown') :
+				this.RichTextEditor.createValueFromString(this.props.input.value, 'html') :
 				this.RichTextEditor.createEmptyValue()
 		})
 	}
@@ -29,7 +29,7 @@ class RichTextMarkdown extends Component {
 		if (nextProps.submitSucceeded) {
 			this.setState({
 				value: this.props.input.value ?
-					this.RichTextEditor.createValueFromString(this.props.input.value, 'markdown') :
+					this.RichTextEditor.createValueFromString(this.props.input.value, 'html') :
 					this.RichTextEditor.createEmptyValue()
 			})
 		}
@@ -37,7 +37,7 @@ class RichTextMarkdown extends Component {
 
 	handleChange = value => {
 		this.setState({ value })
-		let markdown = value.toString('markdown')
+		let markdown = value.toString('html')
 		if(markdown.length === 2 && markdown.charCodeAt(0) === 8203 && markdown.charCodeAt(1) === 10) {
 			markdown = ''
 		}

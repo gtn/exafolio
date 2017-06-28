@@ -115,7 +115,7 @@ export function changeDetails(data) {
 
 export function addItem(data) {
 	return dispatch =>
-		webservice.wsfunction('block_exaport_get_all_items', data)
+		webservice.wsfunction('block_exaport_add_item', data)
 			.then(data => dispatch({
 				type: consts.ADD_ITEM,
 				data

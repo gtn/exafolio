@@ -52,11 +52,19 @@ function pageCourseDetail(state = {}, action) {
 }
 
 function pageItemDetails(state = {}, action) {
-    if (action.type == consts.SWITCH_PAGE && action.page == 'itemdetails') {
-        return {...state, ...action.data};
-    } else {
-        return state;
-    }
+	if (action.type == consts.SWITCH_PAGE && action.page == 'itemdetails') {
+		return {...state, ...action.data};
+	} else {
+		return state;
+	}
+}
+
+function pageAddItem(state = {}, action) {
+	if (action.type == consts.SWITCH_PAGE && action.page == 'additem') {
+		return {...state, ...action.data};
+	} else {
+		return state;
+	}
 }
 
 
@@ -160,7 +168,7 @@ let pages = combineReducers({
 	login: pageLogin,
 	coursedetail: clearOnLoggout(pageCourseDetail),
     itemdetails: clearOnLoggout(pageItemDetails),
-
+	additem: clearOnLoggout(pageAddItem),
 });
 
 function clearOnLoggout(arg) {
@@ -202,8 +210,6 @@ let reducers = combineReducers(
 			tokens,
 			portfolioCategoriesById,
 			portfolioCategoryTree,
-            changedetails,
-            addItem,
 
 		})
 

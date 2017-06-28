@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import FileUpload from 'material-ui/svg-icons/file/file-upload';
 import Menu from '/components/Menu';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
+import RichTextMarkdown from '/components/Rte';
 //import TextField from 'material-ui/TextField';
 import { reduxForm, Field} from 'redux-form'
 import {
@@ -47,8 +48,19 @@ class AddItem extends Component {
 		const { handleSubmit, pristine, reset, submitting, load, change, values,}= this.props;
 		return (
 			<form onSubmit={handleSubmit(data => {
-				console.log(data);
-				this.props.dispatch(actions.addItem(data));
+				var newData = {};
+				newData.title = data.item.name;
+				newData.url = data.item.url;
+				newData.intro = data.item.intro;
+				newData.filename = "";
+				newData.type = "";
+				console.log(this.props.page.selectedCategoryId);
+				newData.categoryid = this.props.page.selectedCategoryId;
+				newData.fileitemid = 0;
+
+				//console.log(newData);
+
+				this.props.dispatch(actions.addItem(newData));
 			})}>
 				<div style={{marginLeft: "1%"}}>
 					<Field
@@ -64,10 +76,9 @@ class AddItem extends Component {
 						hintText="Insert here"
 						floatingLabelText="Content"
 						multiLine={true}
-						component={TextField}
-						name="intro"
+						component={RichTextMarkdown}
+						name="item.intro"
 						type="text"
-						//onChange={() => this.props.dispatch()}
 						rows={2}
 					/>
 					<br />
@@ -117,8 +128,8 @@ AddItem = reduxForm({
 })(AddItem);
 
 export default connect(state => ({
-		//page: pageSelector(state, 'itemdetails'),
-		//initialValues: pageSelector(state, 'itemdetails')
+		page: pageSelector(state, 'additem'),
+		initialValues: pageSelector(state, 'additem')
 
 	}),
 )(AddItem);

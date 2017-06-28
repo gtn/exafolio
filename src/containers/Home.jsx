@@ -52,7 +52,7 @@ class Home extends Component {
 							iconStyle={{width: 48, height: 48, color: "rgb(0, 188, 212)"}}
 							style={{width: 48, height: 48, padding: 0, marginTop:"5px", float: "right"}}
 							onClick={() => {
-								this.props.dispatch(actions.switchPage('additem'));
+								this.props.dispatch(actions.switchPage('additem', {selectedCategoryId: selectedCategory.id}));
 							}}
 						><Add /></IconButton>
 					</div>
