@@ -68,6 +68,7 @@ function pageAddItem(state = {}, action) {
 }
 
 
+
 function user(state = {}, action) {
 	switch (action.type) {
 		case consts.LOGGEDIN:
@@ -102,6 +103,15 @@ function addItem(state = {}, action) {
         default:
             return state;
     }
+}
+
+function DeleteItem(state = {}, action) {
+	switch (action.type) {
+		case consts.DELETE_ITEM:
+			return action.data;
+		default:
+			return state;
+	}
 }
 
 function tokens(state = {}, action) {

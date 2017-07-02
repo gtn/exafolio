@@ -122,6 +122,15 @@ export function addItem(data) {
 			}));
 }
 
+export function deleteItem(data) {
+	return dispatch =>
+		webservice.wsfunction('block_exaport_delete_item', data)
+			.then(data => dispatch({
+				type: consts.DELETE_ITEM,
+				data
+			}));
+}
+
 
 export function switchPage(page, data = {}) {
 	return {

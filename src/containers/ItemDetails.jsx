@@ -114,6 +114,10 @@ class ItemDetails extends Component {
 						/>
 						<button type="submit" disabled={pristine || submitting}>Submit</button>
 						<button onClick={() => this.props.dispatch(actions.switchPage('home'))}>back</button>
+						<button onClick={() => {
+							var newData = {};
+							newData.id=this.props.page.item.id;
+							this.props.dispatch(actions.deleteItem(newData)).then(this.props.dispatch(actions.switchPage('home')))}}>delete</button>
 					</div>
 				</form>
 			);
