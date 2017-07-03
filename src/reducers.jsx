@@ -21,6 +21,15 @@ function isLoggedin(state = false, action) {
 	}
 }
 
+function selectedCategoryId(state = 0, action) {
+	switch (action.type) {
+		case consts.SELECT_CATEGORY:
+			return action.data;
+		default:
+			return state;
+	}
+}
+
 function pageLogin(state = {}, action) {
 	switch (action.type) {
 		case consts.LOGIN_ERROR:
@@ -220,7 +229,7 @@ let reducers = combineReducers(
 			tokens,
 			portfolioCategoriesById,
 			portfolioCategoryTree,
-
+			selectedCategoryId,
 		})
 
 	));

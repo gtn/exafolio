@@ -49,13 +49,14 @@ class AddItem extends Component {
 		return (
 			<form onSubmit={handleSubmit(data => {
 				var newData = {};
+				console.log(data);
 				newData.title = data.item.name;
 				newData.url = data.item.url;
 				newData.intro = data.item.intro;
 				newData.filename = "";
 				newData.type = "";
-				console.log(this.props.page.selectedCategoryId);
-				newData.categoryid = this.props.page.selectedCategoryId;
+				console.log(this.props.selectedCategoryId);
+				newData.categoryid = this.props.selectedCategoryId;
 				newData.fileitemid = 0;
 
 				//console.log(newData);
@@ -129,7 +130,7 @@ AddItem = reduxForm({
 
 export default connect(state => ({
 		page: pageSelector(state, 'additem'),
-		initialValues: pageSelector(state, 'additem')
-
+		initialValues: pageSelector(state, 'additem'),
+		selectedCategoryId: state.selectedCategoryId,
 	}),
 )(AddItem);

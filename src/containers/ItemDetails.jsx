@@ -112,7 +112,7 @@ class ItemDetails extends Component {
 							//onChange={() => this.props.dispatch()}
 							rows={2}
 						/>
-						<button type="submit" disabled={pristine || submitting}>Submit</button>
+						<button type="submit" disabled={submitting}>Submit</button>
 						<button onClick={() => this.props.dispatch(actions.switchPage('home'))}>back</button>
 						<button onClick={() => {
 							var newData = {};

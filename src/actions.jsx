@@ -140,3 +140,9 @@ export function switchPage(page, data = {}) {
 	};
 }
 
+export function selectCategory(categoryId) {
+	return {
+		type: consts.SELECT_CATEGORY,
+		data: categoryId
+	};
+}

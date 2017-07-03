@@ -36,10 +36,8 @@ class Home extends Component {
 	}
 
 	render() {
-		let {selectedCategory} = this.state;
-		if (!selectedCategory) {
-			selectedCategory = this.props.portfolioCategoryTree[0];
-		}
+		let {selectedCategoryId} = this.props;
+		let selectedCategory = this.props.portfolioCategoriesById[selectedCategoryId] || this.props.portfolioCategoryTree[0];
 		let content = null;
 
 		if (selectedCategory) {
@@ -91,7 +89,7 @@ class Home extends Component {
 				<Menu>
 					<SelectableList
 						value={selectedCategory}
-						onChange={(event, value) => this.setState({selectedCategory: value})}
+						onChange={(event, value) => this.props.dispatch(actions.selectCategory(value.id))}
 					>
 						{this.props.portfolioCategoryTree && this.printTree(this.props.portfolioCategoryTree)}
 					</SelectableList>
@@ -107,5 +105,7 @@ class Home extends Component {
 export default connect(state => ({
 	page: pageSelector(state, 'home'),
 	courses: state.user.dakoracourses,
+	selectedCategoryId: state.selectedCategoryId,
 	portfolioCategoryTree: state.portfolioCategoryTree,
+	portfolioCategoriesById: state.portfolioCategoriesById,
 }))(Home);
