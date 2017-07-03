@@ -50,6 +50,18 @@ class Webservice {
 			.then(req => req.json());
 	}
 
+	upload_file(file) {
+		const state = store.getState();
+
+    return this.post(this.moodleurl('/webservice/upload.php'), {
+			token: state.tokens.moodle_mobile_app.token,
+			filepath: '/',
+			filearea: 'draft',
+	    file_box: file,
+		})
+			.then(req => req.json());
+	}
+
 	wsfunction(wsfunction, data = {}) {
 		const state = store.getState();
 

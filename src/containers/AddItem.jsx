@@ -50,11 +50,12 @@ class AddItem extends Component {
 			<form onSubmit={handleSubmit(data => {
 				var newData = {};
 				console.log(data);
-				newData.title = data.item.name;
-				newData.url = data.item.url;
-				newData.intro = data.item.intro;
+				newData.title = data.name;
+				newData.url = data.url;
+				newData.intro = data.intro;
+				newData.file = data.file;
 				newData.filename = "";
-				newData.type = "";
+				newData.type = "file";
 				console.log(this.props.selectedCategoryId);
 				newData.categoryid = this.props.selectedCategoryId;
 				newData.fileitemid = 0;

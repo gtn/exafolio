@@ -114,12 +114,26 @@ export function changeDetails(data) {
 }
 
 export function addItem(data) {
-	return dispatch =>
-		webservice.wsfunction('block_exaport_add_item', data)
-			.then(data => dispatch({
-				type: consts.ADD_ITEM,
-				data
-			}));
+	return dispatch => {
+		var add_item = () => {
+			delete data.file;
+			return webservice.wsfunction('block_exaport_add_item', data)
+				.then(data => dispatch({
+					type: consts.ADD_ITEM,
+					data
+				}));
+		};
+
+		if (data.file) {
+			return webservice.upload_file(data.file[0])
+				.then((ret) => {
+					data.fileitemid = ret[0].itemid;
+				})
+				.then(add_item);
+		} else {
+			return add_item();
+		}
+	};
 }
 
 export function deleteItem(data) {
