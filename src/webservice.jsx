@@ -57,7 +57,7 @@ class Webservice {
 			token: state.tokens.moodle_mobile_app.token,
 			filepath: '/',
 			filearea: 'draft',
-	    file_box: file,
+			file,
 		})
 			.then(req => req.json());
 	}

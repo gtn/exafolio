@@ -51,6 +51,7 @@ class ItemDetails extends Component {
 					//newData.intro = newData.intro.createValueFromString(this.props.input.value, 'text');
 					newData.filename = data.item.filename;
 					newData.type = data.item.type;
+					newData.file = data.file;
 					//console.log(newData);
 
 					this.props.dispatch(actions.changeDetails(newData));

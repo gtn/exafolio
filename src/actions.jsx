@@ -92,12 +92,25 @@ export function testConnection(form) {
 };
 
 export function changeDetails(data) {
-	return dispatch =>
-		webservice.wsfunction('block_exaport_update_item', data)
-			.then(data => dispatch({
-				type: consts.CHANGE_DETAILS,
-				data
-			}));
+	return dispatch => {
+		var update_item = () => {
+			delete data.file;
+			return webservice.wsfunction('block_exaport_update_item', data)
+				.then(data => dispatch({
+					type: consts.CHANGE_DETAILS,
+					data
+				}));
+		};
+
+		if (data.file) {
+			return webservice.upload_file(data.file[0])
+				.then((ret) => {
+					data.fileitemid = ret[0].itemid;
+				}).then(update_item);
+		} else {
+			return update_item();
+		}
+	}
 	/*return (dispatch, getState) => {
 		return webservice.post(state.config.moodleUrl, data)
 			.then(data => {
