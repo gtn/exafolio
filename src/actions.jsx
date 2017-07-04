@@ -93,59 +93,50 @@ export function testConnection(form) {
 
 export function changeDetails(data) {
 	return dispatch => {
-		var update_item = () => {
-			delete data.file;
-			return webservice.wsfunction('block_exaport_update_item', data)
-				.then(data => dispatch({
-					type: consts.CHANGE_DETAILS,
-					data
-				}));
-		};
+		let p = Promise.resolve();
 
-		if (data.file) {
-			return webservice.upload_file(data.file[0])
+		if (data.file && data.file[0]) {
+			var file = data.file[0];
+			p = p
+				.then(() => {
+				console.log('promise', file);
+				return webservice.upload_file(file)
+				})
 				.then((ret) => {
 					data.fileitemid = ret[0].itemid;
-				}).then(update_item);
-		} else {
-			return update_item();
+				});
 		}
+		delete data.file;
+
+		return p
+			.then(() => webservice.wsfunction('block_exaport_update_item', data))
+			.then(data => dispatch({
+				type: consts.CHANGE_DETAILS,
+				data
+			}));
 	}
-	/*return (dispatch, getState) => {
-		return webservice.post(state.config.moodleUrl, data)
-			.then(data => {
-				// call successful, probably got login error, but that's right
-				form.setState({loading: false});
-				alert();
-				dispatch(switchPage('home'));
-			})
-			.catch(() => {
-				// couldn't connect to server
-				form.setState({loading: false, fieldErrors: {moodleUrl: 'could not post'}});
-			});
-	}*/
 }
 
 export function addItem(data) {
 	return dispatch => {
-		var add_item = () => {
-			delete data.file;
-			return webservice.wsfunction('block_exaport_add_item', data)
-				.then(data => dispatch({
-					type: consts.ADD_ITEM,
-					data
-				}));
-		};
+		let p = Promise.resolve();
 
-		if (data.file) {
-			return webservice.upload_file(data.file[0])
+		if (data.file && data.file[0]) {
+			var file = data.file[0];
+			p = p
+				.then(() => webservice.upload_file(file))
 				.then((ret) => {
 					data.fileitemid = ret[0].itemid;
-				})
-				.then(add_item);
-		} else {
-			return add_item();
+				});
 		}
+		delete data.file;
+
+		return p
+			.then(() => webservice.wsfunction('block_exaport_add_item', data))
+			.then(data => dispatch({
+				type: consts.ADD_ITEM,
+				data
+			}));
 	};
 }
 
