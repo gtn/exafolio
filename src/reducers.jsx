@@ -1,6 +1,6 @@
-import { createStore, combineReducers } from 'redux'
-import { reducer as formReducer } from 'redux-form'
-import { LOAD, SAVE } from 'redux-storage';
+import {createStore, combineReducers} from 'redux'
+import {reducer as formReducer} from 'redux-form'
+import {LOAD, SAVE} from 'redux-storage';
 import * as consts from '/consts';
 import * as lib from '/lib';
 
@@ -8,8 +8,6 @@ import * as lib from '/lib';
 const reduxFormReducer = combineReducers({
 	form: formReducer
 });
-
-
 
 
 function isLoggedin(state = false, action) {
@@ -52,6 +50,17 @@ function currentPage(state = '', action) {
 	}
 }
 
+function isLoading(state = 0, action) {
+	switch (action.type) {
+		case consts.LOADING_START:
+			return state + 1;
+		case consts.LOADING_FINISHED:
+			return state - 1;
+		default:
+			return state;
+	}
+}
+
 function pageCourseDetail(state = {}, action) {
 	if (action.type == consts.SWITCH_PAGE && action.page == 'coursedetail') {
 		return {...state, ...action.data};
@@ -77,7 +86,6 @@ function pageAddItem(state = {}, action) {
 }
 
 
-
 function user(state = {}, action) {
 	switch (action.type) {
 		case consts.LOGGEDIN:
@@ -88,30 +96,30 @@ function user(state = {}, action) {
 }
 
 function moodleconfig(state = {}, action) {
-    switch (action.type) {
-        case consts.LOGGEDIN:
-            return action.moodleconfig;
-        default:
-            return state;
-    }
+	switch (action.type) {
+		case consts.LOGGEDIN:
+			return action.moodleconfig;
+		default:
+			return state;
+	}
 }
 
 function changedetails(state = {}, action) {
-    switch (action.type) {
-        case consts.CHANGE_DETALIS:
-            return action.data;
-        default:
-            return state;
-    }
+	switch (action.type) {
+		case consts.CHANGE_DETALIS:
+			return action.data;
+		default:
+			return state;
+	}
 }
 
 function addItem(state = {}, action) {
-    switch (action.type) {
-        case consts.ADD_ITEM:
-            return action.data;
-        default:
-            return state;
-    }
+	switch (action.type) {
+		case consts.ADD_ITEM:
+			return action.data;
+		default:
+			return state;
+	}
 }
 
 function DeleteItem(state = {}, action) {
@@ -186,7 +194,7 @@ function portfolioCategoriesById(state = {}, action) {
 let pages = combineReducers({
 	login: pageLogin,
 	coursedetail: clearOnLoggout(pageCourseDetail),
-    itemdetails: clearOnLoggout(pageItemDetails),
+	itemdetails: clearOnLoggout(pageItemDetails),
 	additem: clearOnLoggout(pageAddItem),
 });
 
@@ -220,7 +228,7 @@ let reducers = combineReducers(
 			config,
 			currentPage,
 			pages,
-			form: formReducer
+			form: formReducer,
 		},
 		clearOnLoggout({
 			isLoggedin,
@@ -230,8 +238,8 @@ let reducers = combineReducers(
 			portfolioCategoriesById,
 			portfolioCategoryTree,
 			selectedCategoryId,
+			isLoading,
 		})
-
 	));
 
 
@@ -244,7 +252,7 @@ export default function rootReducer(oldState = {}, action) {
 			state.currentPage = 'login';
 		}
 	} else {
-		if (['home', 'itemdetails','additem'].indexOf(state.currentPage) < 0) {
+		if (['home', 'itemdetails', 'additem'].indexOf(state.currentPage) < 0) {
 			state.currentPage = 'home';
 		}
 	}

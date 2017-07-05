@@ -50,6 +50,7 @@ class App extends Component {
 					style={{position: 'fixed', left: 0, top: 0}}
 					iconElementRight={
 						<div>
+							<span style={{color: 'red', fontWeight: 'bold'}}>{this.props.isLoading ? 'Loading' : 'Not Loading'}</span>
 							<IconButton
 								iconStyle={{width: 48, height: 48, color: 'white'}}
 								style={{width: 48, height: 48, padding: 0, margin: 0}}

@@ -62,7 +62,7 @@ class AddItem extends Component {
 
 				//console.log(newData);
 
-				this.props.dispatch(actions.addItem(newData)).then(this.props.dispatch(actions.switchPage('home')));
+				this.props.dispatch(actions.loading(actions.addItem(newData))).then(this.props.dispatch(actions.switchPage('home')));
 			})}>
 				<div style={{marginLeft: "1%"}}>
 					<Field

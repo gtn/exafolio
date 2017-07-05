@@ -54,7 +54,7 @@ class ItemDetails extends Component {
 					newData.file = data.file;
 					//console.log(newData);
 
-					this.props.dispatch(actions.changeDetails(newData));
+					this.props.dispatch(actions.loading(actions.changeDetails(newData))).then(this.props.dispatch(actions.switchPage('home')));
 				})}>
 					<div style={{marginLeft: "1%"}}>
 						<Field
@@ -118,7 +118,7 @@ class ItemDetails extends Component {
 						<button onClick={() => {
 							var newData = {};
 							newData.id=this.props.page.item.id;
-							this.props.dispatch(actions.deleteItem(newData)).then(this.props.dispatch(actions.switchPage('home')))}}>delete</button>
+							this.props.dispatch(actions.loading(actions.deleteItem(newData))).then(this.props.dispatch(actions.switchPage('home')))}}>delete</button>
 					</div>
 				</form>
 			);

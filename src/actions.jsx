@@ -1,6 +1,35 @@
 import webservice from '/webservice';
 import * as consts from '/consts';
 
+export function loading(fnc) {
+	return dispatch => {
+		dispatch({
+			type: consts.LOADING_START,
+		});
+
+		let p = fnc(dispatch);
+		if (!p instanceof Promise) {
+			throw new Error('not a promise');
+		}
+
+		return p
+			.then((res) => {
+				dispatch({
+					type: consts.LOADING_FINISHED,
+				});
+
+				return res;
+			})
+			.catch((e) => {
+				dispatch({
+					type: consts.LOADING_FINISHED,
+				});
+
+				throw e;
+			});
+	}
+}
+
 export function login(form, formData) {
 	return dispatch => {
 		return webservice.login(formData)
@@ -99,8 +128,7 @@ export function changeDetails(data) {
 			var file = data.file[0];
 			p = p
 				.then(() => {
-				console.log('promise', file);
-				return webservice.upload_file(file)
+					return webservice.upload_file(file)
 				})
 				.then((ret) => {
 					data.fileitemid = ret[0].itemid;

@@ -20,7 +20,7 @@ class Home extends Component {
 	}
 
 	componentDidMount() {
-		this.props.dispatch(actions.loadPortfolioCategories());
+		this.props.dispatch(actions.loading(actions.loadPortfolioCategories()));
 	}
 
 	printTree(children) {
