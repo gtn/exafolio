@@ -54,7 +54,7 @@ class ItemDetails extends Component {
 					newData.file = data.file;
 					//console.log(newData);
 
-					this.props.dispatch(actions.loading(actions.changeDetails(newData))).then(this.props.dispatch(actions.switchPage('home')));
+					this.props.dispatch(actions.loading(actions.changeDetails(newData))).then(() => this.props.dispatch(actions.switchPage('home')));
 				})}>
 					<div style={{marginLeft: "1%"}}>
 						<Field

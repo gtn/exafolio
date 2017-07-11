@@ -3,7 +3,7 @@ import {reducer as formReducer} from 'redux-form'
 import {LOAD, SAVE} from 'redux-storage';
 import * as consts from '/consts';
 import * as lib from '/lib';
-
+import loader from './loader';
 
 const reduxFormReducer = combineReducers({
 	form: formReducer
@@ -52,10 +52,12 @@ function currentPage(state = '', action) {
 
 function isLoading(state = 0, action) {
 	switch (action.type) {
+		case LOAD:
+			return 0;
 		case consts.LOADING_START:
 			return state + 1;
 		case consts.LOADING_FINISHED:
-			return state - 1;
+			return state > 0 ? state - 1 : 0;
 		default:
 			return state;
 	}

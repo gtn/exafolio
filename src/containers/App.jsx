@@ -11,6 +11,8 @@ import '/css/styles.css';
 import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
 import AddItem from './AddItem';
 import ItemDetails from './ItemDetails';
+import styled from 'styled-components';
+import LoadingOverlay from '/components/LoadingOverlay';
 
 // Needed for onTouchTap
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -31,7 +33,7 @@ class App extends Component {
 			page = <CourseDetail/>;
 		} else if (this.props.currentPage == 'home') {
 			page = <Home/>;
-		}else if (this.props.currentPage == 'itemdetails') {
+		} else if (this.props.currentPage == 'itemdetails') {
 			page = <ItemDetails/>;
 		}
 		else if (this.props.currentPage == 'additem') {
@@ -41,7 +43,6 @@ class App extends Component {
 			page = <redux-form-example/>;
 		}
 
-
 		return (
 			<div>
 				<AppBar
@@ -50,7 +51,6 @@ class App extends Component {
 					style={{position: 'fixed', left: 0, top: 0}}
 					iconElementRight={
 						<div>
-							<span style={{color: 'red', fontWeight: 'bold'}}>{this.props.isLoading ? 'Loading' : 'Not Loading'}</span>
 							<IconButton
 								iconStyle={{width: 48, height: 48, color: 'white'}}
 								style={{width: 48, height: 48, padding: 0, margin: 0}}
@@ -61,9 +61,10 @@ class App extends Component {
 						</div>
 					}
 				/>
-				<div style={{marginTop:"64px"}}>
-				{page}
+				<div style={{marginTop: "64px"}}>
+					{page}
 				</div>
+				<LoadingOverlay loading={this.props.isLoading}/>
 			</div>
 		);
 	}
