@@ -12,3 +12,11 @@ npm install
 npm start
 open http://localhost:3000
 ```
+
+
+Building process:
+
+open cmd
+C:\Users\x-net\WebstormProjects\exafolio>
+npm run build
+if the index.dist.html has failed to move into the dist folder, move this file yourself
