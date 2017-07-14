@@ -79,7 +79,7 @@ class AddItem extends Component {
 						floatingLabelText="Content"
 						multiLine={true}
 						component={RichTextMarkdown}
-						name="item.intro"
+						name="intro"
 						type="text"
 						rows={2}
 					/>
