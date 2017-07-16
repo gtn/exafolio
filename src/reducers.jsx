@@ -133,6 +133,15 @@ function DeleteItem(state = {}, action) {
 	}
 }
 
+function DeleteCategory(state = {}, action) {
+    switch (action.type) {
+        case consts.DELETE_CATEGORY:
+            return action.data;
+        default:
+            return state;
+    }
+}
+
 function tokens(state = {}, action) {
 	switch (action.type) {
 		case consts.LOGGEDIN:

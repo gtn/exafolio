@@ -4,6 +4,7 @@ import * as actions from '/actions';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import Add from 'material-ui/svg-icons/content/add';
+import Clear from 'material-ui/svg-icons/content/clear';
 import {pageSelector} from '/selectors';
 import Menu from '/components/Menu';
 import ItemTypeFileIcon from 'material-ui/svg-icons/av/note';
@@ -45,7 +46,15 @@ class Home extends Component {
 				<div>
 					<div>
 					<h2 style={{display:"inline-block"}}>{selectedCategory.name}</h2>
-
+                        <IconButton
+                            iconStyle={{width: 48, height: 48, color: "rgb(255, 0, 0)"}}
+                            style={{width: 48, height: 48, padding: 0, marginTop:"5px", float: "right", }}
+                            onClick={() => {
+                                var catId={};
+                                catId.id=selectedCategory.id;
+                                this.props.dispatch(actions.loading((actions.deleteCategory(catId))))
+                            }}
+                        ><Clear /></IconButton>
 						<IconButton
 							iconStyle={{width: 48, height: 48, color: "rgb(0, 188, 212)"}}
 							style={{width: 48, height: 48, padding: 0, marginTop:"5px", float: "right"}}
@@ -53,6 +62,7 @@ class Home extends Component {
 								this.props.dispatch(actions.switchPage('additem', {selectedCategoryId: selectedCategory.id}));
 							}}
 						><Add /></IconButton>
+
 					</div>
 					<List>
 						{selectedCategory.items.length ?
@@ -73,7 +83,19 @@ class Home extends Component {
 										<div dangerouslySetInnerHTML={{__html: sanitizeHtml(item.intro)}}></div>
 									</div>
 									}
-								/>
+								>
+                                    <div>
+                                    <IconButton
+                                        iconStyle={{width: 48, height: 48, color: "rgb(255, 0, 0)"}}
+                                        style={{width: 48, height: 48, padding: 0, float: "right", }}
+                                        onClick={() => {
+                                            var itemId={};
+                                            itemId.id=item.id;
+                                            this.props.dispatch(actions.loading((actions.deleteItem(itemId))))
+                                        }}
+                                    ><Clear /></IconButton>
+                                        </div>
+                                    </ListItem>
 							) :
 							<ListItem
 								key="empty"
