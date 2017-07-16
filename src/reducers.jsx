@@ -156,38 +156,29 @@ function config(state = {}, action) {
 	}
 }
 
-function portfolioCategoryTree(state = [], action) {
+function portfolioCategoriesById(state = null, action) {
 	switch (action.type) {
-		case consts.PORTFOLIO_CATEGORIES_LOADED:
-			let categoriesById = {};
-			let categoryTree = [];
-
-			action.categories.forEach((category) => {
-				categoriesById[category.id] = category;
-				category.children = [];
-			});
-
-			action.categories.forEach((category) => {
-				if (category.pid > 0 && categoriesById[category.pid]) {
-					categoriesById[category.pid].children.push(category);
-				} else {
-					categoryTree.push(category);
-				}
-			});
-
-			return categoryTree;
-		default:
-			return state;
-	}
-}
-
-function portfolioCategoriesById(state = {}, action) {
-	switch (action.type) {
+		case LOAD:
+			return {};
 		case consts.PORTFOLIO_CATEGORIES_LOADED:
 			let categoriesById = {};
 			action.categories.forEach((category) => categoriesById[category.id] = category);
 
 			return categoriesById;
+		default:
+			return state;
+	}
+}
+
+function portfolioCategoriesReload(state = true, action) {
+	switch (action.type) {
+		case LOAD:
+		case consts.CHANGE_DETAILS:
+		case consts.ADD_ITEM:
+		case consts.DELETE_ITEM:
+			return true;
+		case consts.PORTFOLIO_CATEGORIES_LOADED:
+			return false;
 		default:
 			return state;
 	}
@@ -238,7 +229,7 @@ let reducers = combineReducers(
 			moodleconfig,
 			tokens,
 			portfolioCategoriesById,
-			portfolioCategoryTree,
+			portfolioCategoriesReload,
 			selectedCategoryId,
 			isLoading,
 		})
