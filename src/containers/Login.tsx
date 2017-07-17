@@ -1,24 +1,31 @@
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator'
-import * as actions from '/actions';
-import * as lib from '/lib';
+import * as actions from 'actions';
+import * as lib from 'lib';
 import TextField from 'material-ui/TextField';
 import LoginIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import RaisedButton from 'material-ui/RaisedButton';
-import Modal from '/components/Modal';
-import {connect} from 'react-redux';
-import {pageSelector} from '/selectors';
+import Modal from 'components/Modal';
+import {connect, DispatchProp} from 'react-redux';
+import {pageSelector} from 'selectors';
 import LinearProgress from 'material-ui/LinearProgress';
 
 // remember the state
 let state = {
-	fieldValues: {},
+	fieldValues: {} as { [key: string]: string },
 	loading: false,
-	error: null
+	error: null as string
 };
 
-class Login extends Component {
+export interface Props extends DispatchProp<any> {
+	config:  { [key: string]: string },
+	page:  { [key: string]: string },
+};
+
+type State = typeof state;
+
+class Login extends Component<Props, State> {
 	constructor(props) {
 		super(props);
 

@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
-export default class Modal extends Component {
+export interface Props {
+	dispatch?: (...args) => void,
+	header: string,
+};
+
+export default class Modal extends Component<Props,{}> {
 	render() {
 		return (
 			<div className="exa-modal">

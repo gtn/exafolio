@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator'
 import * as actions from '/actions';
-import Modal from '../components/Modal';
+import Modal from '/components/Modal';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import DoneIcon from 'material-ui/svg-icons/action/done';

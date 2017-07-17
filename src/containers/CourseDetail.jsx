@@ -1,10 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import {connect} from 'react-redux';
-import {pageSelector} from '/selectors';
-import * as actions from '/actions';
-import webservice from '/webservice';
+import {pageSelector} from 'selectors';
+import * as actions from 'actions';
+import webservice from 'webservice';
 import {List, ListItem} from 'material-ui/List';
-import Menu from '/components/Menu';
+import Menu from 'components/Menu';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 
 class CourseDetail extends Component {

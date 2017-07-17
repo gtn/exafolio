@@ -3,6 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from './reducers';
 import * as storage from 'redux-storage'
 import debounce from 'redux-storage-decorator-debounce'
+import { createLogger } from 'redux-logger'
 
 /* *
 const loggerMiddleware = createLogger();
@@ -51,7 +52,6 @@ let middlewares = [
 ];
 
 if (process.env.NODE_ENV !== 'production') {
-	let createLogger = require('redux-logger');
 	middlewares.push(createLogger());
 }
 
