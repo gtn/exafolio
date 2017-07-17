@@ -3,7 +3,6 @@ import {reducer as formReducer} from 'redux-form'
 import {LOAD, SAVE} from 'redux-storage';
 import * as consts from '/consts';
 import * as lib from '/lib';
-import loader from './loader';
 
 const reduxFormReducer = combineReducers({
 	form: formReducer

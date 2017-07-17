@@ -7,7 +7,7 @@ import LoginIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import RaisedButton from 'material-ui/RaisedButton';
 import Modal from 'components/Modal';
-import {connect, DispatchProp} from 'react-redux';
+import {connect} from 'react-redux';
 import {pageSelector} from 'selectors';
 import LinearProgress from 'material-ui/LinearProgress';
 
@@ -18,7 +18,7 @@ let state = {
 	error: null as string
 };
 
-export interface Props extends DispatchProp<any> {
+export interface Props extends lib.DefaultProps {
 	config:  { [key: string]: string },
 	page:  { [key: string]: string },
 };
@@ -26,8 +26,8 @@ export interface Props extends DispatchProp<any> {
 type State = typeof state;
 
 class Login extends Component<Props, State> {
-	constructor(props) {
-		super(props);
+	constructor(props, context) {
+		super(props, context);
 
 		// set the initial component state
 		this.state = state;

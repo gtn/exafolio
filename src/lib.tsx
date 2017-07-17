@@ -1,3 +1,9 @@
+import {Dispatch, DispatchProp} from 'react-redux';
+
+declare global {
+    interface Window { exafolioConfig: any; }
+}
+
 export function getDefaultSetting(name) {
 	return window.exafolioConfig && window.exafolioConfig[name];
 }
@@ -29,3 +35,5 @@ export function getPortfolioCategoryTree(categoriesById) {
 	return rootChildren;
 }
 
+export interface DefaultProps extends DispatchProp<any> {
+}

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
 export interface Props {
-	dispatch?: (...args) => void,
 	header: string,
 };
 

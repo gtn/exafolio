@@ -1,5 +1,5 @@
-import webservice from '/webservice';
-import * as consts from '/consts';
+import webservice from 'webservice';
+import * as consts from 'consts';
 
 export function loading(fnc) {
 	return (dispatch, getState) => {

@@ -4,15 +4,19 @@ import Login from './Login';
 import Settings from './Settings';
 import Home from './Home';
 import CourseDetail from './CourseDetail';
-import * as actions from '/actions';
+import * as actions from 'actions';
+import * as lib from 'lib';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import '/css/styles.css';
 import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
 import AddItem from './AddItem';
 import ItemDetails from './ItemDetails';
-import styled from 'styled-components';
-import LoadingOverlay from '/components/LoadingOverlay';
+import LoadingOverlay from 'components/LoadingOverlay';
+
+declare global {
+    interface Window { TapEventInjected: boolean; }
+}
 
 // Needed for onTouchTap
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -21,7 +25,15 @@ if (!window.TapEventInjected) {
 	window.TapEventInjected = true;
 }
 
-class App extends Component {
+interface Props extends lib.DefaultProps {
+	currentPage: string,
+	user: {
+		fullname: string
+	},
+	isLoading: boolean
+}
+
+class App extends Component<Props, any> {
 	render() {
 		let page;
 
@@ -35,12 +47,8 @@ class App extends Component {
 			page = <Home/>;
 		} else if (this.props.currentPage == 'itemdetails') {
 			page = <ItemDetails/>;
-		}
-		else if (this.props.currentPage == 'additem') {
+		} else if (this.props.currentPage == 'additem') {
 			page = <AddItem/>;
-		}
-		else if (this.props.currentPage == 'redux-form-example') {
-			page = <redux-form-example/>;
 		}
 
 		return (
@@ -69,9 +77,5 @@ class App extends Component {
 		);
 	}
 }
-
-App.propTypes = {
-	dispatch: PropTypes.func.isRequired
-};
 
 export default connect((state) => state)(App);

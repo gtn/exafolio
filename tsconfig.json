@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "rootDir": "src",
+    "baseUrl": "./src",
+    "rootDir": "./src",
     "module": "es6", // use ES2015 modules
     "target": "es6", // compile to ES2015 (Babel will do the rest)
     "allowSyntheticDefaultImports": true, // see below
@@ -11,7 +11,8 @@
     // "strict": true,
     "allowJs": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "lib": ["ES2017", "DOM"]
   },
   "exclude": [
     "node_modules" // don't run on any code in the node_modules directory
