@@ -60,7 +60,7 @@ class AddItem extends Component {
 				newData.categoryid = this.props.selectedCategoryId;
 				newData.fileitemid = 0;
 
-				console.log(newData);
+				//console.log(newData);
 
 				this.props.dispatch(actions.loading(actions.addItem(newData))).then(() => this.props.dispatch(actions.switchPage('home')));
 			})}>
