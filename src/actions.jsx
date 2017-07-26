@@ -2,23 +2,18 @@ import webservice from '/webservice';
 import * as consts from '/consts';
 
 export function loading(fnc) {
-	return dispatch => {
+	return (dispatch, getState) => {
 		dispatch({
 			type: consts.LOADING_START,
 		});
 
-		let p = fnc(dispatch);
-		if (!p instanceof Promise) {
-			throw new Error('not a promise');
-		}
-
-		return p
+		return Promise.all([fnc(dispatch, getState)])
 			.then((res) => {
 				dispatch({
 					type: consts.LOADING_FINISHED,
 				});
 
-				return res;
+				return res[0];
 			})
 			.catch((e) => {
 				dispatch({
@@ -60,12 +55,16 @@ export function login(form, formData) {
 }
 
 export function loadPortfolioCategories() {
-	return dispatch =>
-		webservice.wsfunction('block_exaport_get_all_items')
-			.then(categories => dispatch({
-				type: consts.PORTFOLIO_CATEGORIES_LOADED,
-				categories
-			}));
+	return (dispatch, getState) => {
+		getState().portfolioCategoriesReload
+		&& dispatch(loading(
+			() => webservice.wsfunction('block_exaport_get_all_items')
+				.then(categories => dispatch({
+					type: consts.PORTFOLIO_CATEGORIES_LOADED,
+					categories
+				}))
+		));
+	}
 }
 
 export function loadCourses() {

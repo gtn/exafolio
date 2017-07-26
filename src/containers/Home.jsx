@@ -9,7 +9,7 @@ import Menu from '/components/Menu';
 import ItemTypeFileIcon from 'material-ui/svg-icons/av/note';
 import MenuItemIcon from 'material-ui/svg-icons/file/folder';
 import sanitizeHtml from 'sanitize-html';
-
+import {getPortfolioCategoryTree} from '/lib';
 
 let SelectableList = makeSelectable(List);
 
@@ -36,15 +36,20 @@ class Home extends Component {
 	}
 
 	render() {
-		let {selectedCategoryId} = this.props;
-		let selectedCategory = this.props.portfolioCategoriesById[selectedCategoryId] || this.props.portfolioCategoryTree[0];
+		let {selectedCategoryId, portfolioCategoriesById} = this.props;
+
+		let hasCategories = !!Object.keys(portfolioCategoriesById).length;
+
+		let portfolioCategoryTree = getPortfolioCategoryTree(portfolioCategoriesById);
+
+		let selectedCategory = hasCategories && portfolioCategoriesById[selectedCategoryId];
 		let content = null;
 
 		if (selectedCategory) {
 			content = (
 				<div>
 					<div>
-					<h2 style={{display:"inline-block"}}>{selectedCategory.name}</h2>
+						<h2 style={{display:"inline-block"}}>{selectedCategory.name}</h2>
 
 						<IconButton
 							iconStyle={{width: 48, height: 48, color: "rgb(0, 188, 212)"}}
@@ -68,7 +73,7 @@ class Home extends Component {
 									primaryText={<div>{item.name}
 										<div>File: <a href={item.file} target="_blank">{item.filename}</a></div>
 										{item.isimage &&
-											<img style={{maxWidth: '200px', maxHeight: '200px'}} src={item.file}/>
+										<img style={{maxWidth: '200px', maxHeight: '200px'}} src={item.file}/>
 										}
 										<div dangerouslySetInnerHTML={{__html: sanitizeHtml(item.intro)}}></div>
 									</div>
@@ -91,7 +96,7 @@ class Home extends Component {
 						value={selectedCategory}
 						onChange={(event, value) => this.props.dispatch(actions.selectCategory(value.id))}
 					>
-						{this.props.portfolioCategoryTree && this.printTree(this.props.portfolioCategoryTree)}
+						{portfolioCategoryTree && this.printTree(portfolioCategoryTree)}
 					</SelectableList>
 				</Menu>
 				<Menu.PageContent>
@@ -106,6 +111,5 @@ export default connect(state => ({
 	page: pageSelector(state, 'home'),
 	courses: state.user.dakoracourses,
 	selectedCategoryId: state.selectedCategoryId,
-	portfolioCategoryTree: state.portfolioCategoryTree,
 	portfolioCategoriesById: state.portfolioCategoriesById,
 }))(Home);
