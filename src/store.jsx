@@ -51,8 +51,8 @@ let middlewares = [
 ];
 
 if (process.env.NODE_ENV !== 'production') {
-	let createLogger = require('redux-logger');
-	middlewares.push(createLogger());
+	let logger = require('redux-logger');
+	middlewares.push(logger.createLogger());
 }
 
 // As everything is prepared, we can go ahead and combine all parts as usual

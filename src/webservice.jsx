@@ -27,7 +27,9 @@ class Webservice {
 	}
 
 	post(url, data = {}) {
-		var form = new FormData()
+		// URLSearchParams instead of FormData
+		// so content-type in the post request is application/x-www-form-urlencoded
+		var form = new URLSearchParams()
 		for (var key in data) {
 			form.append(key, data[key]);
 		}
@@ -53,7 +55,7 @@ class Webservice {
 	upload_file(file) {
 		const state = store.getState();
 
-    return this.post(this.moodleurl('/webservice/upload.php'), {
+		return this.post(this.moodleurl('/webservice/upload.php'), {
 			token: state.tokens.moodle_mobile_app.token,
 			filepath: '/',
 			filearea: 'draft',
@@ -80,7 +82,7 @@ class Webservice {
 				}
 				return response;
 			})
-			.catch(exception=> {
+			.catch(exception => {
 				if (exception instanceof WebserviceException && exception.errorcode == 'invalidtoken') {
 					// invalidtoken
 					store.dispatch(actions.loginError('login error'));
